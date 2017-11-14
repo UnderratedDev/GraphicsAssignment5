@@ -325,7 +325,9 @@ namespace asgn5v1
 		[STAThread]
 		static void Main() 
 		{
-			Application.Run(new Transformer());
+            new MainProgram();
+
+            Application.Run(new Transformer());
 		}
 
 		protected override void OnPaint(PaintEventArgs pea)
