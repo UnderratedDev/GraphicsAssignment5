@@ -16,3 +16,13 @@ C:\Documents and Settings\00729757\Desktop\COMP4560\Comp4560200810\asgn5student\
 \\Mac\Home\Desktop\asgn5student\obj\Debug\asgn5v1.csproj.CoreCompileInputs.cache
 \\Mac\Home\Desktop\asgn5student\obj\Debug\asgn5v1.exe
 \\Mac\Home\Desktop\asgn5student\obj\Debug\asgn5v1.pdb
+\\Mac\Home\Desktop\GraphicsAssignment5\asgn5student\obj\Debug\asgn5v1.csprojResolveAssemblyReference.cache
+\\Mac\Home\Desktop\GraphicsAssignment5\asgn5student\obj\Debug\asgn5v1.AboutDialogBox.resources
+\\Mac\Home\Desktop\GraphicsAssignment5\asgn5student\obj\Debug\asgn5v1.Transformer.resources
+\\Mac\Home\Desktop\GraphicsAssignment5\asgn5student\obj\Debug\asgn5v1.csproj.GenerateResource.Cache
+\\Mac\Home\Desktop\GraphicsAssignment5\asgn5student\obj\Debug\asgn5v1.csproj.CoreCompileInputs.cache
+\\Mac\Home\Desktop\GraphicsAssignment5\asgn5student\obj\Debug\asgn5v1.exe
+\\Mac\Home\Desktop\GraphicsAssignment5\asgn5student\obj\Debug\asgn5v1.pdb
+\\Mac\Home\Desktop\GraphicsAssignment5\asgn5student\bin\Debug\asgn5v1.exe.config
+\\Mac\Home\Desktop\GraphicsAssignment5\asgn5student\bin\Debug\asgn5v1.exe
+\\Mac\Home\Desktop\GraphicsAssignment5\asgn5student\bin\Debug\asgn5v1.pdb
