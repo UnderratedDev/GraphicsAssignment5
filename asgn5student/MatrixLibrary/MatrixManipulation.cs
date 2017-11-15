@@ -34,8 +34,38 @@ namespace asgn5v1.MatrixLibrary
             return c;
         }
 
-        public static void multiplyMatrix (ref Matrix m, double multiplier)
+        public static Matrix multiplyMatrix (Matrix a, Matrix b)
         {
+            if (a == null || b == null || a.getXLen() != b.getYLen())
+            {
+                return null;
+            }
+
+            int width = a.getXLen();
+            int height = b.getYLen();
+
+            int colLength = a.getXLen();
+
+                
+
+            Matrix c = new Matrix(width, height);
+
+            double value = 0;
+
+            for (int row = 0; row < height; ++row)
+            {
+                for (int col = 0; col < width; ++col)
+                {
+                    for (int ndx = 0; ndx < colLength; ++ndx)
+                    {
+                        value = c.getValue(row, col);
+                        value += a.getValue(row, ndx) * b.getValue (ndx, col);
+                        c.insertValue(row, col, value);
+                    }
+                }
+            }
+
+            return c;
 
         }
     }
