@@ -19,6 +19,13 @@ namespace asgn5v1.MatrixLibrary
             this.matrix = new double[x_len, y_len];
         }
 
+        public Matrix (int x, int y, double [,] matrix)
+        {
+            this.x_len = x;
+            this.y_len = y;
+            this.matrix = matrix;
+        }
+
         public void setXLen (int x)
         {
             this.x_len = x;

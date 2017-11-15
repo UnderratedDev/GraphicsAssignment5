@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace asgn5v1.MatrixLibrary
 {
-    class MatrixManipulation
+    static class MatrixManipulation
     {
         public static Matrix addMatricies (Matrix a, Matrix b)
         {
