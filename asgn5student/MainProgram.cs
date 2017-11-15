@@ -13,17 +13,19 @@ namespace asgn5v1
         {
             Matrix a = new Matrix(3, 4);
             Matrix b = new Matrix(3, 3);
-            double[,] c = new double[,] { { 1, 4, 7, 10 }, { 2, 5, 8, 11 }, { 3, 6, 9, 12 } };
+            double[,] c = new double[,] { { 1, 4, 7 }, { 2, 5, 8 }, { 3, 6, 9 } };
             double[,] d = new double[,] { { 1, 4, 7 }, { 2, 5, 8 }, { 3, 6, 9 } };
             a.setMatrix(c, 3, 4);
             b.setMatrix(d, 3, 3);
             a.printMatrix();
             Console.WriteLine();
             b.printMatrix();
-
-            Matrix e = MatrixManipulation.multiplyMatrices(a, b);
+            Matrix e = MatrixManipulation.addMatrices(a, b);
+            Matrix f = MatrixManipulation.multiplyMatrices(a, b);
             Console.WriteLine();
-            e.printMatrix();
+            //e.printMatrix();
+            Console.WriteLine();
+            f.printMatrix();
         }
     }
 }
