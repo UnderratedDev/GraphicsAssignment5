@@ -22,8 +22,11 @@ namespace asgn5v1
             b.printMatrix();
 
             Matrix e = MatrixManipulation.addMatricies(a, b);
+            Matrix f = MatrixManipulation.multiplyMatrix(a, b);
             Console.WriteLine();
             e.printMatrix();
+            Console.WriteLine();
+            f.printMatrix();
         }
     }
 }
