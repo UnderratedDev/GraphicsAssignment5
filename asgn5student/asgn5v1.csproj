@@ -122,6 +122,7 @@
     <Compile Include="MainProgram.cs" />
     <Compile Include="MatrixLibrary\Matrix.cs" />
     <Compile Include="MatrixLibrary\MatrixManipulation.cs" />
+    <Compile Include="MatrixLibrary\TransformationsHelper.cs" />
     <EmbeddedResource Include="AboutDialogBox.resx">
       <DependentUpon>AboutDialogBox.cs</DependentUpon>
     </EmbeddedResource>
