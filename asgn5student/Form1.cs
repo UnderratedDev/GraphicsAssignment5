@@ -22,8 +22,8 @@ namespace asgn5v1
 		int numpts = 0;
 		int numlines = 0;
 		bool gooddata = false;		
-		double[,] vertices;
-		double[,] scrnpts;
+		float[,] vertices;
+		float[,] scrnpts;
 		double[,] ctrans = new double[4,4];  //your main transformation matrix
 		private System.Windows.Forms.ImageList tbimages;
 		private System.Windows.Forms.ToolBar toolBar1;
@@ -48,7 +48,7 @@ namespace asgn5v1
 		private System.Windows.Forms.ToolBarButton toolBarButton5;
 		private System.Windows.Forms.ToolBarButton resetbtn;
 		private System.Windows.Forms.ToolBarButton exitbtn;
-		int[,] lines;
+		double[,] lines;
 
 		public Transformer()
 		{
@@ -334,7 +334,7 @@ namespace asgn5v1
 		{
 			Graphics grfx = pea.Graphics;
          Pen pen = new Pen(Color.White, 3);
-			double temp;
+			float temp;
 			int k;
 
             if (gooddata)
@@ -346,9 +346,9 @@ namespace asgn5v1
                 {
                     for (int j = 0; j < 4; j++)
                     {
-                        temp = 0.0d;
+                        temp = 0.0f;
                         for (k = 0; k < 4; k++)
-                            temp += vertices[i, k] * ctrans[k, j];
+                            temp += vertices[i, k] * (float)ctrans[k, j];
                         scrnpts[i, j] = temp;
                     }
                 }
@@ -357,8 +357,14 @@ namespace asgn5v1
 
                 for (int i = 0; i < numlines; i++)
                 {
-                    grfx.DrawLine(pen, (int)scrnpts[lines[i, 0], 0], (int)scrnpts[lines[i, 0], 1],
-                        (int)scrnpts[lines[i, 1], 0], (int)scrnpts[lines[i, 1], 1]);
+                    try
+                    {
+                        grfx.DrawLine(pen, scrnpts[(int)lines[i, 0], 0], scrnpts[(int)lines[i, 0], 1],
+                            scrnpts[(int)lines[i, 1], 0], scrnpts[(int)lines[i, 1], 1]);
+                    } catch (Exception ex)
+                    {
+
+                    }
                 }
 
 
@@ -433,7 +439,7 @@ namespace asgn5v1
 				MessageBox.Show("***Failed to Open Line Data File***");
 				return false;
 			}
-			scrnpts = new double[numpts,4];
+			scrnpts = new float[numpts,4];
 			setIdentity(ctrans,4,4);  //initialize transformation matrix to identity
 			return true;
 		} // end of GetNewData
@@ -441,17 +447,19 @@ namespace asgn5v1
 		void DecodeCoords(ArrayList coorddata)
 		{
 			//this may allocate slightly more rows that necessary
-			vertices = new double[coorddata.Count,4];
+			vertices = new float[coorddata.Count,4];
 			numpts = 0;
 			string [] text = null;
 			for (int i = 0; i < coorddata.Count; i++)
 			{
 				text = coorddata[i].ToString().Split(' ',',');
-				vertices[numpts,0]=double.Parse(text[0]);
+				vertices[numpts,0]=float.Parse(text[0]);
 				if (vertices[numpts,0] < 0.0d) break;
-				vertices[numpts,1]=double.Parse(text[1]);
-				vertices[numpts,2]=double.Parse(text[2]);
-				vertices[numpts,3] = 1.0d;
+				vertices[numpts,1]=float.Parse(text[1]);
+                if (text.Length == 3)
+				vertices[numpts,2]=float.Parse(text[2]);
+                if(text.Length == 4)
+				vertices[numpts,3] = 1.0f;
 				numpts++;						
 			}
 			
@@ -460,15 +468,15 @@ namespace asgn5v1
 		void DecodeLines(ArrayList linesdata)
 		{
 			//this may allocate slightly more rows that necessary
-			lines = new int[linesdata.Count,2];
+			lines = new double[linesdata.Count,2];
 			numlines = 0;
 			string [] text = null;
 			for (int i = 0; i < linesdata.Count; i++)
 			{
 				text = linesdata[i].ToString().Split(' ',',');
-				lines[numlines,0]=int.Parse(text[0]);
+				lines[numlines,0]=double.Parse(text[0]);
 				if (lines[numlines,0] < 0) break;
-				lines[numlines,1]=int.Parse(text[1]);
+				lines[numlines,1]=double.Parse(text[1]);
 				numlines++;						
 			}
 		} // end of DecodeLines
