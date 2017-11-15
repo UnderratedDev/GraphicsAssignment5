@@ -8,7 +8,7 @@ namespace asgn5v1.MatrixLibrary
 {
     class MatrixManipulation
     {
-        public static Matrix addMatricies (Matrix a, Matrix b)
+        public static Matrix addMatrices (Matrix a, Matrix b)
         {
             if (a == null || b == null || a.getXLen() != b.getXLen() || a.getYLen() != b.getYLen ())
             {
@@ -32,11 +32,6 @@ namespace asgn5v1.MatrixLibrary
             }
 
             return c;
-        }
-
-        public static void multiplyMatrix (ref Matrix m, double multiplier)
-        {
-
         }
     }
 }
