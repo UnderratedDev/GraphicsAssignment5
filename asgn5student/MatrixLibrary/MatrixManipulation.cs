@@ -33,7 +33,33 @@ namespace asgn5v1.MatrixLibrary
 
             return c;
         }
-        
+
+        public static Matrix subtractMatrices(Matrix a, Matrix b)
+        {
+            if (a == null || b == null || a.getXLen() != b.getXLen() || a.getYLen() != b.getYLen())
+            {
+                return null;
+            }
+
+            int width = a.getXLen();
+            int height = b.getYLen();
+
+            Matrix c = new Matrix(width, height);
+
+            double value = 0;
+
+            for (int x = 0; x < width; ++x)
+            {
+                for (int y = 0; y < height; ++y)
+                {
+                    value = a.getValue(x, y) - b.getValue(x, y);
+                    c.insertValue(x, y, value);
+                }
+            }
+
+            return c;
+        }
+
         public static Matrix multiplyMatrices (Matrix a, Matrix b)
         {
             if (a == null || b == null || a.getXLen() != b.getYLen())
