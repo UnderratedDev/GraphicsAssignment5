@@ -8,51 +8,51 @@ namespace asgn5v1.MatrixLibrary
 {
     class Matrix
     {
-        private int x_len;
-        private int y_len;
+        private int columns;
+        private int rows;
         private double[,] matrix;
 
-        public Matrix (int x, int y)
+        public Matrix (int columns, int rows)
         {
-            this.x_len = x;
-            this.y_len = y;
-            this.matrix = new double[x_len, y_len];
+            this.columns = columns;
+            this.rows = rows;
+            this.matrix = new double[columns, rows];
         }
 
-        public Matrix (int x, int y, double [,] matrix)
+        public Matrix (int columns, int rows, double [,] matrix)
         {
-            this.x_len = x;
-            this.y_len = y;
+            this.columns = columns;
+            this.rows = rows;
             this.matrix = matrix;
         }
 
-        public void setXLen (int x)
+        public void setColumns (int columns)
         {
-            this.x_len = x;
-            this.matrix = new double[x_len, y_len];
+            this.columns = columns;
+            this.matrix = new double[columns, rows];
         }
         
-        public void setYLen (int y)
+        public void setRows (int rows)
         {
-            this.y_len = y;
-            this.matrix = new double[x_len, y_len];
+            this.rows = rows;
+            this.matrix = new double[columns, rows];
         }
 
         public void setMatrix(double[,] matrix, int x, int y)
         {
             this.matrix = matrix;
-            x_len = x;
-            y_len = y;
+            columns = x;
+            rows = y;
         }
 
-        public int getXLen ()
+        public int getColumns ()
         {
-            return x_len;
+            return columns;
         }
 
-        public int getYLen()
+        public int getRows ()
         {
-            return y_len;
+            return rows;
         }
 
         public double[,] getMatrix()
@@ -70,20 +70,178 @@ namespace asgn5v1.MatrixLibrary
             return this.matrix[x, y];
         }
 
-        public void printMatrix ()
+        public static Matrix operator+ (Matrix a, Matrix b)
         {
-            for (int y = 0; y < y_len; ++y)
+            if (a == null || b == null) 
             {
-                Console.Write("[");
-                for (int x = 0; x < x_len; ++x)
-                {
-                    Console.Write(this.matrix[x, y] + " ");
-                }
-                Console.WriteLine("]");
+                throw new Exception("Matrix is null");
             }
-           
+
+            if (a.getColumns() != b.getColumns())
+            {
+                throw new Exception("Column sizes do not match");
+            }
+
+            if (a.getRows() != b.getRows())
+            {
+                throw new Exception("Row sizes do not match");
+            }
+
+            int width = a.getColumns();
+            int height = b.getRows();
+
+            Matrix c = new Matrix(width, height);
+
+            double value = 0;
+
+            for (int x = 0; x < width; ++x)
+            {
+                for (int y = 0; y < height; ++y)
+                {
+                    value = a.getValue(x, y) + b.getValue(x, y);
+                    c.insertValue(x, y, value);
+                }
+            }
+
+            return c;
         }
 
+        public static Matrix operator- (Matrix a, Matrix b)
+        {
+            if (a == null || b == null)
+            {
+                throw new Exception("Matrix is null");
+            }
 
+            if (a.getColumns() != b.getColumns())
+            {
+                throw new Exception("Column sizes do not match");
+            }
+
+            if (a.getRows() != b.getRows())
+            {
+                throw new Exception("Row sizes do not match");
+            }
+            int width = a.getColumns();
+            int height = b.getRows();
+
+            Matrix c = new Matrix(width, height);
+
+            double value = 0;
+
+            for (int x = 0; x < width; ++x)
+            {
+                for (int y = 0; y < height; ++y)
+                {
+                    value = a.getValue(x, y) - b.getValue(x, y);
+                    c.insertValue(x, y, value);
+                }
+            }
+
+            return c;
+        }
+
+        public static Matrix operator* (Matrix a, Matrix b)
+        {
+            if (a == null || b == null)
+            {
+                throw new Exception("Matrix is null");
+            }
+
+            if (a.getColumns() != b.getRows())
+            {
+                throw new Exception("Columns do not match multiplier matrix row");
+            }
+
+            int width = b.getColumns();
+            int height = a.getRows();
+            int colLength = a.getColumns();
+
+            Matrix c = new Matrix(width, height);
+
+            double value = 0;
+
+            for (int row = 0; row < width; ++row)
+            {
+                for (int col = 0; col < height; ++col)
+                {
+                    for (int ndx = 0; ndx < colLength; ++ndx)
+                    {
+                        value = c.getValue(row, col);
+                        value += a.getValue(ndx, col) * b.getValue(row, ndx);
+                        c.insertValue(row, col, value);
+                    }
+                }
+            }
+            return c;
+        }
+
+        public static bool operator== (Matrix a, Matrix b)
+        {
+
+            if (object.ReferenceEquals(a, null))
+            {
+                return object.ReferenceEquals(b, null);
+            }
+
+            else if (object.ReferenceEquals(b, null) || a.getColumns() != b.getColumns() || a.getRows() != b.getRows())
+            {
+                return false;
+
+            }
+
+            int width = a.getColumns();
+            int height = a.getRows();
+            for (int i = 0; i < width; ++i)
+            {
+                for (int j = 0; j < height; ++j)
+                {
+                    if (a.getValue(i, j) != b.getValue(i, j))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public static bool operator !=(Matrix a, Matrix b)
+        {
+            return !(a == b);
+        }
+
+        public override string ToString ()
+        {
+            string print = "";
+            for (int y = 0; y < rows; ++y)
+            {
+                print += "[";
+                for (int x = 0; x < columns; ++x)
+                {
+                    print += this.matrix[x, y] + " ";
+                }
+                print += "]\n";
+            }
+            return print;
+        }
+
+        public override bool Equals(object obj)
+        {
+            var matrix = obj as Matrix;
+            return matrix != null &&
+                   columns == matrix.columns &&
+                   rows == matrix.rows &&
+                   EqualityComparer<double[,]>.Default.Equals(this.matrix, matrix.matrix);
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = -2012147648;
+            hashCode = hashCode * -1521134295 + columns.GetHashCode();
+            hashCode = hashCode * -1521134295 + rows.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<double[,]>.Default.GetHashCode(matrix);
+            return hashCode;
+        }
     }
 }

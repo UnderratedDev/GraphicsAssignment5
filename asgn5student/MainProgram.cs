@@ -11,22 +11,21 @@ namespace asgn5v1
     {
         public MainProgram ()
         {
-            Matrix a = new Matrix(3, 3);
+            Matrix a = new Matrix(3, 4);
             Matrix b = new Matrix(3, 3);
-            double[,] c = new double[,] { { 1, 4, 7 }, { 2, 5, 8 }, { 3, 6, 9 } };
+            double[,] c = new double[,] { { 1, 4, 7, 10 }, { 2, 5, 8, 11 }, { 3, 6, 9, 12 } };
             double[,] d = new double[,] { { 1, 4, 7 }, { 2, 5, 8 }, { 3, 6, 9 } };
-            a.setMatrix(c, 3, 3);
+            a.setMatrix(c, 3, 4);
             b.setMatrix(d, 3, 3);
-            a.printMatrix();
-            Console.WriteLine();
-            b.printMatrix();
 
-            Matrix e = MatrixManipulation.addMatricies(a, b);
-            Matrix f = MatrixManipulation.multiplyMatrix(a, b);
-            Console.WriteLine();
-            e.printMatrix();
-            Console.WriteLine();
-            f.printMatrix();
+            Console.WriteLine(a);
+
+            Console.WriteLine(b);
+
+            // Matrix e = a + b;
+            Matrix f = a * b;
+            
+            Console.WriteLine(f);
         }
     }
 }
