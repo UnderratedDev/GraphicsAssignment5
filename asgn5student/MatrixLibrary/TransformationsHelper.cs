@@ -72,34 +72,34 @@ namespace asgn5v1.MatrixLibrary
 
         public static Matrix translate (Matrix a, params double[] translation)
         {
-            Matrix translate = translateMatrix(a.getXLen(), a.getYLen(), translation);
-            Matrix result = MatrixManipulation.multiplyMatrices(a, translate);
+            Matrix translate = translateMatrix(a.getColumns(), a.getRows(), translation);
+            Matrix result = a * translate;
             return result;
         }
 
         public static Matrix scale (Matrix a, params double[] scaling)
         {
-            Matrix scale = scaleMatrix(a.getXLen(), a.getYLen (), scaling);
-            Matrix result = MatrixManipulation.multiplyMatrices(a, scale);
+            Matrix scale = scaleMatrix(a.getColumns(), a.getRows(), scaling);
+            Matrix result = a * scale;
             return result;
         }
 
         public static Matrix shear2D(Matrix a, double x, double y) {
             Matrix shear = shear2DMatrix(x, y);
-            Matrix result = MatrixManipulation.multiplyMatrices(a, shear);
+            Matrix result = a * shear;
             return result;
         }
 
         public static Matrix rotate2D(Matrix a, double rot) {
             Matrix rotation = rotate2DMatrix(rot);
-            Matrix result = MatrixManipulation.multiplyMatrices(a, rotation);
+            Matrix result = a * rotation;
             return result;
         }
 
         public static Matrix reflect (Matrix a, params bool[] reflect)
         {
-            Matrix reflection = reflectMatrix(a.getXLen(), a.getYLen(), reflect);
-            Matrix result = MatrixManipulation.multiplyMatrices(a, reflection);
+            Matrix reflection = reflectMatrix(a.getColumns(), a.getRows(), reflect);
+            Matrix result = a * reflection;
             return result;
         }
 
@@ -107,7 +107,7 @@ namespace asgn5v1.MatrixLibrary
         {
             Matrix tNet = identity2D;
             for (int i = 0; i < matricies.Length; ++i)
-                tNet = MatrixManipulation.multiplyMatrices(tNet, matricies[i]);
+                tNet *= matricies[i];
 
             return tNet;
         }

@@ -72,9 +72,19 @@ namespace asgn5v1.MatrixLibrary
 
         public static Matrix operator+ (Matrix a, Matrix b)
         {
-            if (a == null || b == null || a.getColumns() != b.getColumns() || a.getRows() != b.getRows())
+            if (a == null || b == null) 
             {
-                return null;
+                throw new Exception("Matrix is null");
+            }
+
+            if (a.getColumns() != b.getColumns())
+            {
+                throw new Exception("Column sizes do not match");
+            }
+
+            if (a.getRows() != b.getRows())
+            {
+                throw new Exception("Row sizes do not match");
             }
 
             int width = a.getColumns();
@@ -98,11 +108,20 @@ namespace asgn5v1.MatrixLibrary
 
         public static Matrix operator- (Matrix a, Matrix b)
         {
-            if (a == null || b == null || a.getColumns() != b.getColumns() || a.getRows() != b.getRows())
+            if (a == null || b == null)
             {
-                return null;
+                throw new Exception("Matrix is null");
             }
 
+            if (a.getColumns() != b.getColumns())
+            {
+                throw new Exception("Column sizes do not match");
+            }
+
+            if (a.getRows() != b.getRows())
+            {
+                throw new Exception("Row sizes do not match");
+            }
             int width = a.getColumns();
             int height = b.getRows();
 
@@ -124,9 +143,14 @@ namespace asgn5v1.MatrixLibrary
 
         public static Matrix operator* (Matrix a, Matrix b)
         {
-            if (a == null || b == null || a.getColumns() != b.getRows())
+            if (a == null || b == null)
             {
-                return null;
+                throw new Exception("Matrix is null");
+            }
+
+            if (a.getColumns() != b.getRows())
+            {
+                throw new Exception("Columns do not match multiplier matrix row");
             }
 
             int width = b.getColumns();
@@ -155,14 +179,15 @@ namespace asgn5v1.MatrixLibrary
         public static bool operator== (Matrix a, Matrix b)
         {
 
-            if (a == null && b == null)
+            if (object.ReferenceEquals(a, null))
             {
-                return true;
+                return object.ReferenceEquals(b, null);
             }
 
-            if (a == null || b == null || a.getColumns() != b.getColumns() || a.getRows() != b.getRows())
+            else if (object.ReferenceEquals(b, null) || a.getColumns() != b.getColumns() || a.getRows() != b.getRows())
             {
                 return false;
+
             }
 
             int width = a.getColumns();
@@ -183,44 +208,22 @@ namespace asgn5v1.MatrixLibrary
 
         public static bool operator !=(Matrix a, Matrix b)
         {
-            if (a == null && b == null)
-            {
-                return false;
-            }
-
-            if (a == null || b == null || a.getColumns() != b.getColumns() || a.getRows() != b.getRows())
-            {
-                return true;
-            }
-
-            int width = a.getColumns();
-            int height = a.getRows();
-            for (int i = 0; i < width; ++i)
-            {
-                for (int j = 0; j < height; ++j)
-                {
-                    if (a.getValue(i, j) != b.getValue(i, j))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
+            return !(a == b);
         }
 
-        public void printMatrix()
+        public override string ToString ()
         {
+            string print = "";
             for (int y = 0; y < rows; ++y)
             {
-                Console.Write("[");
+                print += "[";
                 for (int x = 0; x < columns; ++x)
                 {
-                    Console.Write(this.matrix[x, y] + " ");
+                    print += this.matrix[x, y] + " ";
                 }
-                Console.WriteLine("]");
+                print += "]\n";
             }
-
+            return print;
         }
 
         public override bool Equals(object obj)

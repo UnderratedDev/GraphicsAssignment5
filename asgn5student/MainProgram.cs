@@ -17,15 +17,15 @@ namespace asgn5v1
             double[,] d = new double[,] { { 1, 4, 7 }, { 2, 5, 8 }, { 3, 6, 9 } };
             a.setMatrix(c, 3, 4);
             b.setMatrix(d, 3, 3);
-            a.printMatrix();
-            Console.WriteLine();
-            b.printMatrix();
-            Matrix e = MatrixManipulation.addMatrices(a, b);
-            Matrix f = MatrixManipulation.multiplyMatrices(a, b);
-            Console.WriteLine();
-            //e.printMatrix();
-            Console.WriteLine();
-            f.printMatrix();
+
+            Console.WriteLine(a);
+
+            Console.WriteLine(b);
+
+            // Matrix e = a + b;
+            Matrix f = a * b;
+            
+            Console.WriteLine(f);
         }
     }
 }
