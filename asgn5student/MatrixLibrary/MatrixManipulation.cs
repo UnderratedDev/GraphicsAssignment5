@@ -14,14 +14,13 @@ namespace asgn5v1.MatrixLibrary
             if (a == null || a.getColumns() != a.getRows())
                 return null;
 
-
             return null;
         }
 
         public static Matrix generateIdentityMatrix (int size)
         {
-            if (size == 0)
-                return null;
+            if (size < 1)
+                throw new Exception("Minimum size 1 for an identity matrix");
 
             Matrix a = new Matrix(size, size);
 
