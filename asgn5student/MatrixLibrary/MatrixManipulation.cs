@@ -19,18 +19,34 @@ namespace asgn5v1.MatrixLibrary
 
         public static Matrix generateIdentityMatrix (int size)
         {
-            if (size < 1)
+           if (size < 1)
                 throw new Exception("Minimum size 1 for an identity matrix");
 
-            Matrix a = new Matrix(size, size);
+            double[] multiples = new double[size];
 
             for (int i = 0; i < size; ++i)
             {
-                for (int j = 0; j < size; ++j)
+                multiples[i] = 1;
+            }
+
+            return generateScalarMatrix(multiples);
+            
+        }
+
+        public static Matrix generateScalarMatrix (params double[] multiples)
+        {
+            if (multiples.Length < 1)
+                throw new Exception("Minimum size 1 for an scalar matrix");
+
+            Matrix a = new Matrix(multiples.Length, multiples.Length);
+
+            for (int i = 0; i < multiples.Length; ++i)
+            {
+                for (int j = 0; j < multiples.Length; ++j)
                 {
                     if (i == j)
                     {
-                        a.insertValue(i, j, 1);
+                        a.insertValue(i, j, multiples[i]);
                     }
                 }
             }

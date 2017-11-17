@@ -21,6 +21,12 @@ namespace asgn5v1
             Matrix e = MatrixManipulation.generateIdentityMatrix(4);
             e = TransformationsHelper.scale(e, 2, 3, 8);
 
+            Matrix g = MatrixManipulation.generateIdentityMatrix(3);
+            g = TransformationsHelper.scale(g, 2, 5);
+
+            Matrix h = MatrixManipulation.generateIdentityMatrix(4);
+            h = TransformationsHelper.scale(h, 2, 5, 6);
+
             Console.WriteLine(a);
 
             Console.WriteLine(b);

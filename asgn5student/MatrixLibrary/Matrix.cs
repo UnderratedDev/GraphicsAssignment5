@@ -176,6 +176,29 @@ namespace asgn5v1.MatrixLibrary
             return c;
         }
 
+        public static Matrix operator* (Matrix a, double multiplier)
+        {
+            if (a == null)
+            {
+                throw new Exception("Matrix is null");
+            }
+
+            int width = a.getColumns();
+            int height = a.getRows();
+
+            Matrix b = new Matrix(width, height);
+
+            for (int x = 0; x < width; ++x)
+            {
+                for (int y = 0; y < height; ++y)
+                {
+                    b.insertValue(x, y, a.getValue(x, y) * multiplier);
+                }
+            }
+
+            return b;
+        }
+
         public static bool operator== (Matrix a, Matrix b)
         {
 
@@ -183,11 +206,9 @@ namespace asgn5v1.MatrixLibrary
             {
                 return object.ReferenceEquals(b, null);
             }
-
             else if (object.ReferenceEquals(b, null) || a.getColumns() != b.getColumns() || a.getRows() != b.getRows())
             {
                 return false;
-
             }
 
             int width = a.getColumns();

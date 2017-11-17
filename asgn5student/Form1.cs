@@ -486,7 +486,7 @@ namespace asgn5v1
 			for (int i = 0; i < nrow;i++) 
 			{
 				for (int j = 0; j < ncol; j++) A[i,j] = 0.0d;
-				A[i,i] = 1.0d;
+				    A[i,i] = 1.0d;
 			}
 		}// end of setIdentity
       
