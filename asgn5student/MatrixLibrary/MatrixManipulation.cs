@@ -9,12 +9,32 @@ namespace asgn5v1.MatrixLibrary
     static class MatrixManipulation
     {
 
-        public static Matrix inverseMatrix(Matrix a)
+        public static Matrix generateInverseMatrix(Matrix a)
         {
             if (a == null || a.getColumns() != a.getRows())
                 return null;
 
             return null;
+        }
+
+        public static Matrix generateTransposeMatrix (Matrix a)
+        {
+            if (a == null)
+                throw new Exception ("Matrix is null");
+
+            int columns = a.getColumns(), rows = a.getRows();
+
+            Matrix b = new Matrix(rows, columns);
+
+            for (int x = 0; x < columns; ++x)
+            {
+                for (int y = 0; y < rows; ++y)
+                {
+                    b.insertValue(y, x, a.getValue(x, y));
+                }
+            }
+
+            return b;
         }
 
         public static Matrix generateIdentityMatrix (int size)

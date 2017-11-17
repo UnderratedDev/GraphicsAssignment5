@@ -18,6 +18,7 @@ namespace asgn5v1
             a.setMatrix(c, 3, 4);
             b.setMatrix(d, 3, 3);
 
+            /*
             Matrix e = MatrixManipulation.generateIdentityMatrix(4);
             e = TransformationsHelper.scale(e, 2, 3, 8);
 
@@ -33,10 +34,20 @@ namespace asgn5v1
 
             Console.WriteLine(e);
 
+            Matrix i = MatrixManipulation.generateIdentityMatrix(5);
+
+            Console.WriteLine(i); */
+
+            Matrix j = MatrixManipulation.generateTransposeMatrix(b);
+
+            Console.WriteLine(b);
+
+            Console.WriteLine(j);
+
             // Matrix e = a + b;
-            Matrix f = a * b;
+            // Matrix f = a * b;
             
-            Console.WriteLine(f);
+            // Console.WriteLine(f);
         }
     }
 }

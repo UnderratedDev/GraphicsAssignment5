@@ -333,13 +333,13 @@ namespace asgn5v1
 		protected override void OnPaint(PaintEventArgs pea)
 		{
 			Graphics grfx = pea.Graphics;
-         Pen pen = new Pen(Color.White, 3);
+            Pen pen = new Pen(Color.White, 3);
 			float temp;
 			int k;
 
             if (gooddata)
             {
-                //create the screen coordinates:
+                // create the screen coordinates:
                 // scrnpts = vertices*ctrans
 
                 for (int i = 0; i < numpts; i++)
@@ -500,7 +500,10 @@ namespace asgn5v1
 		{
 			if (e.Button == transleftbtn)
 			{
-				Refresh();
+                Console.WriteLine(vertices);
+                Console.WriteLine(vertices.Length);
+                Console.WriteLine(numpts);
+                Refresh();
 			}
 			if (e.Button == transrightbtn) 
 			{
