@@ -19,7 +19,7 @@ namespace asgn5v1.MatrixLibrary
 
         public static Matrix generateIdentityMatrix (int size)
         {
-            if (size < 1)
+            if (MatrixValidation.validateIdentityMatrixSize(size))
                 throw new Exception("Minimum size 1 for an identity matrix");
 
             Matrix a = new Matrix(size, size);
@@ -40,7 +40,7 @@ namespace asgn5v1.MatrixLibrary
 
         public static bool checkInverse (Matrix a, Matrix b)
         {
-            if (a == null || a.getColumns() != a.getRows() || a.getColumns() != b.getColumns() || a.getRows() != b.getRows())
+            if (MatrixValidation.validateInverse(a, b))
             {
                 return false;
             }
