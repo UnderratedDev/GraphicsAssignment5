@@ -70,6 +70,31 @@ namespace asgn5v1.MatrixLibrary
             return this.matrix[x, y];
         }
 
+        public Matrix getRange (int x, int y, int x_, int y_)
+        {
+            if (x_ < x || y_ < y)
+            {
+                throw new Exception("Invalid range");
+            }
+
+            int columns = x_ - x + 1;
+            int rows = y_ - y + 1;
+          
+            Matrix b = new Matrix(columns, rows);
+            int col = 0, row = 0;
+            for (int i = x; i <= x_; ++i)
+            {
+                col = 0;
+                for (int j = y; j <= y_; ++j)
+                {
+                    b.insertValue(col++, row, this.getValue(i, j));
+                }
+                ++row;
+            }
+
+            return b;
+        }
+
         public static Matrix operator+ (Matrix a, Matrix b)
         {
             if (a == null || b == null) 
@@ -176,6 +201,37 @@ namespace asgn5v1.MatrixLibrary
             return c;
         }
 
+        public static Matrix operator* (Matrix a, double multiplier)
+        {
+            if (a == null)
+            {
+                throw new Exception("Matrix is null");
+            }
+
+            int width = a.getColumns();
+            int height = a.getRows();
+
+            Matrix b = new Matrix(width, height);
+
+            for (int x = 0; x < width; ++x)
+            {
+                for (int y = 0; y < height; ++y)
+                {
+                    b.insertValue(x, y, a.getValue(x, y) * multiplier);
+                }
+            }
+
+            return b;
+        }
+
+        /*
+         * Not a "proper" mathematical division of a matrix however it is the same as multiplying by 1/10 if dividing by 10
+        */
+        public static Matrix operator/ (Matrix a, double divisor)
+        {
+            return a * (MathematicalHelper.Invert(divisor));
+        }
+
         public static bool operator== (Matrix a, Matrix b)
         {
 
@@ -183,11 +239,9 @@ namespace asgn5v1.MatrixLibrary
             {
                 return object.ReferenceEquals(b, null);
             }
-
             else if (object.ReferenceEquals(b, null) || a.getColumns() != b.getColumns() || a.getRows() != b.getRows())
             {
                 return false;
-
             }
 
             int width = a.getColumns();
@@ -210,6 +264,10 @@ namespace asgn5v1.MatrixLibrary
         {
             return !(a == b);
         }
+        
+        /*
+         * Operator overloading for ., concatination (concat) / appending of matricies
+         */
 
         public override string ToString ()
         {
@@ -243,5 +301,9 @@ namespace asgn5v1.MatrixLibrary
             hashCode = hashCode * -1521134295 + EqualityComparer<double[,]>.Default.GetHashCode(matrix);
             return hashCode;
         }
+
+        /*
+         * ++, --, divide and conquer, n^2, homogoues coordinates, append
+         */
     }
 }

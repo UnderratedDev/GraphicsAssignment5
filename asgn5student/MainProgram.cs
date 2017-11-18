@@ -18,19 +18,15 @@ namespace asgn5v1
             a.setMatrix(c, 3, 4);
             b.setMatrix(d, 3, 3);
 
-            Matrix e = MatrixManipulation.generateIdentityMatrix(4);
-            e = TransformationsHelper.scale(e, 2, 3, 8);
+            Matrix e = new Matrix(3, 3);
+            double[,] f = new double[,] { { 6, 4, 2 }, { 1, -2, 8 }, { 1, 5, 7 } };
+            e.setMatrix(f, 3, 3);
 
-            Console.WriteLine(a);
-
-            Console.WriteLine(b);
-
-            Console.WriteLine(e);
-
-            // Matrix e = a + b;
-            Matrix f = a * b;
-            
             Console.WriteLine(f);
+            double derterminent = MatrixManipulation.matrixDeterminant(e);
+
+            Console.WriteLine(derterminent);
+
         }
     }
 }

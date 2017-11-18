@@ -120,6 +120,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainProgram.cs" />
+    <Compile Include="MatrixLibrary\MathematicalHelper.cs" />
     <Compile Include="MatrixLibrary\Matrix.cs" />
     <Compile Include="MatrixLibrary\MatrixManipulation.cs" />
     <Compile Include="MatrixLibrary\MatrixValidation.cs" />

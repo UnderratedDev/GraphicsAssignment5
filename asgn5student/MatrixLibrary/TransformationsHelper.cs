@@ -10,6 +10,12 @@ namespace asgn5v1.MatrixLibrary
     {
         private static Matrix identity2D = MatrixManipulation.generateIdentityMatrix(3);
         private static Matrix identity3D = MatrixManipulation.generateIdentityMatrix(4);
+        private static int minTransformationMatrixSize = 3;
+
+        private static bool minTransformationMatrix (int columns, int rows)
+        {
+            return (columns > minTransformationMatrixSize && rows > minTransformationMatrixSize);
+        }
 
         private static Matrix translateMatrix(int columns, int rows, params double[] translation)
         {

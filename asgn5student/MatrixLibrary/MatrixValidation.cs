@@ -32,7 +32,7 @@ namespace asgn5v1.MatrixLibrary
        */
 
         public static bool validateIdentityMatrixSize(int s) {
-            return (s < 1) ? true : false;
+            return s < 1;
         }
         public static bool validateReflectScaling(int r, int c, int l) {
             return (c !=r || c <= l - 1 || r <= l - 1) ? true : false;
