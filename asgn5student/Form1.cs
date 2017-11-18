@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Data;
 using System.IO;
 using System.Text;
+using asgn5v1.MatrixLibrary;
 
 namespace asgn5v1
 {
@@ -22,9 +23,9 @@ namespace asgn5v1
         int numpts = 0;
         int numlines = 0;
         bool gooddata = false;
-        double[,] vertices;
-        double[,] scrnpts;
-        double[,] ctrans = new double[4, 4];  //your main transformation matrix
+        Matrix vertices;
+        Matrix scrnpts;
+        Matrix transformation = new Matrix(4, 4); //your main transformation matrix
         private System.Windows.Forms.ImageList tbimages;
         private System.Windows.Forms.ToolBar toolBar1;
         private System.Windows.Forms.ToolBarButton transleftbtn;
@@ -48,7 +49,7 @@ namespace asgn5v1
         private System.Windows.Forms.ToolBarButton toolBarButton5;
         private System.Windows.Forms.ToolBarButton resetbtn;
         private System.Windows.Forms.ToolBarButton exitbtn;
-        int[,] lines;
+        Matrix lines;
 
         public Transformer()
         {
@@ -346,8 +347,8 @@ namespace asgn5v1
                     {
                         temp = 0.0d;
                         for (k = 0; k < 4; k++)
-                            temp += vertices[i, k] * ctrans[k, j];
-                        scrnpts[i, j] = temp;
+                            temp += vertices.getValue(i, k) * transformation.getValue(k, j);
+                        scrnpts.insertValue(i, j, temp);
                     }
                 }
 
@@ -355,8 +356,8 @@ namespace asgn5v1
 
                 for (int i = 0; i < numlines; i++)
                 {
-                    grfx.DrawLine(pen, (int)scrnpts[lines[i, 0], 0], (int)scrnpts[lines[i, 0], 1],
-                        (int)scrnpts[lines[i, 1], 0], (int)scrnpts[lines[i, 1], 1]);
+                    grfx.DrawLine(pen, (int)scrnpts.getValue((int)lines.getValue(i, 0), 0), (int)scrnpts.getValue((int)lines.getValue(i, 0), 1),
+                        (int)scrnpts.getValue((int)lines.getValue(i, 1), 0), (int)scrnpts.getValue((int)lines.getValue(i, 1), 1));
                 }
 
 
@@ -431,25 +432,26 @@ namespace asgn5v1
                 MessageBox.Show("***Failed to Open Line Data File***");
                 return false;
             }
-            scrnpts = new double[numpts, 4];
-            setIdentity(ctrans, 4, 4);  //initialize transformation matrix to identity
+            scrnpts = new Matrix(numpts, 4);
+            transformation = MatrixManipulation.generateIdentityMatrix(4); //initialize transformation matrix to identity
             return true;
         } // end of GetNewData
 
         void DecodeCoords(ArrayList coorddata)
         {
             //this may allocate slightly more rows that necessary
-            vertices = new double[coorddata.Count, 4];
+            vertices = new Matrix(coorddata.Count, 4);
             numpts = 0;
             string[] text = null;
             for (int i = 0; i < coorddata.Count; i++)
             {
                 text = coorddata[i].ToString().Split(' ', ',');
-                vertices[numpts, 0] = double.Parse(text[0]);
-                if (vertices[numpts, 0] < 0.0d) break;
-                vertices[numpts, 1] = double.Parse(text[1]);
-                vertices[numpts, 2] = double.Parse(text[2]);
-                vertices[numpts, 3] = 1.0d;
+                vertices.insertValue(numpts, 0, double.Parse(text[0]));
+                if (vertices.getValue (numpts, 0) < 0.0d)
+                    break;
+                vertices.insertValue(numpts, 1, double.Parse(text[1]));
+                vertices.insertValue(numpts, 2, double.Parse(text[2]));
+                vertices.insertValue(numpts, 3, 1.0d);
                 numpts++;
             }
 
@@ -458,15 +460,16 @@ namespace asgn5v1
         void DecodeLines(ArrayList linesdata)
         {
             //this may allocate slightly more rows that necessary
-            lines = new int[linesdata.Count, 2];
+            lines = new Matrix(linesdata.Count, 2);
             numlines = 0;
             string[] text = null;
             for (int i = 0; i < linesdata.Count; i++)
             {
                 text = linesdata[i].ToString().Split(' ', ',');
-                lines[numlines, 0] = int.Parse(text[0]);
-                if (lines[numlines, 0] < 0) break;
-                lines[numlines, 1] = int.Parse(text[1]);
+                lines.insertValue(numlines, 0, int.Parse(text[0]));
+                if (lines.getValue(numlines, 0) < 0)
+                    break;
+                lines.insertValue(numlines, 1, int.Parse(text[1]));
                 numlines++;
             }
         } // end of DecodeLines
