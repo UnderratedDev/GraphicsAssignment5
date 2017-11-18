@@ -9,10 +9,74 @@ namespace asgn5v1.MatrixLibrary
     static class MatrixManipulation
     {
 
+        public static double matrixDeterminant (Matrix a)
+        {
+            if (a == null || a.getRows () < 2)
+                throw new Exception("Matrix is null");
+
+            int columns = a.getColumns(), rows = a.getRows();
+
+            double result = 0;
+
+            Matrix b = new Matrix(columns - 1, rows - 1);
+
+            int col = 0, row = 0;
+           
+            for (int x = 0; x < columns; ++x)
+            {
+                for (int column = 0; column < columns; ++column)
+                {
+                    if (x == column)
+                    {
+                        continue;
+                    }
+                    for (int y = 1; y < rows; ++y)
+                    {
+                        // b.insertValue(col, row++, a.getValue(x, y));
+                    }
+                    row = 0;
+                    ++col;
+                }
+
+                double value = multiplyMatrix(b, a.getValue(x, 0));
+
+                if (x % 2 == 0)
+                    result += value;
+                else
+                    result -= value;
+            }
+
+            return result;
+        }
+        
+        public static double multiplyMatrix (Matrix a, double multiplier)
+        {
+
+            if (a == null)
+                throw new Exception("Matrix is null");
+
+            double result = 0;
+
+            int columns = a.getColumns(), rows = a.getRows();
+
+            for (int x = 0; x < columns; ++x)
+            {
+                for (int y = 0; y < rows; ++y)
+                {
+                    result += a.getValue(x, y) * multiplier;
+                }
+            }
+
+            return result;
+
+        }
+
         public static Matrix generateInverseMatrix(Matrix a)
         {
-            if (a == null || a.getColumns() != a.getRows())
-                return null;
+            if (a == null)
+                throw new Exception("Matrix is null");
+
+            int columns = a.getColumns(), rows = a.getRows();
 
             return null;
         }
