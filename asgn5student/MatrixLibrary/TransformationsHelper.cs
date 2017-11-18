@@ -9,10 +9,11 @@ namespace asgn5v1.MatrixLibrary
     static class TransformationsHelper
     {
         private static Matrix identity2D = MatrixManipulation.generateIdentityMatrix(3);
+        private static Matrix identity3D = MatrixManipulation.generateIdentityMatrix(4);
 
         private static Matrix translateMatrix(int columns, int rows, params double[] translation)
         {
-            if (columns != rows || columns <= translation.Length - 1)
+            if (MatrixValidation.validateTranslation(rows, columns, translation.Length))
             {
                 return null;
             }
@@ -34,7 +35,7 @@ namespace asgn5v1.MatrixLibrary
 
         private static Matrix scaleMatrix (int columns, int rows, params double[] scaling)
         {
-            if (columns != rows || columns <= scaling.Length - 1 || rows <= scaling.Length - 1)
+            if (MatrixValidation.validateReflectScaling(rows, columns, scaling.Length))
             {
                 return null;
             }
@@ -55,9 +56,38 @@ namespace asgn5v1.MatrixLibrary
             return a;
         }
 
+        private static Matrix rotate3DXMatrix(double rot) {
+            Matrix a = identity3D;
+            a.insertValue(1 , 1, Math.Cos(rot));
+            a.insertValue(2, 1, Math.Sin(rot));
+            a.insertValue(1, 2, Math.Sin(rot));
+            a.insertValue(2, 2, Math.Cos(rot));
+            return a;
+        }
+
+        private static Matrix rotate3DYMatrix(double rot)
+        {
+            Matrix a = identity3D;
+            a.insertValue(0, 0, Math.Cos(rot));
+            a.insertValue(2, 0, Math.Sin(rot));
+            a.insertValue(0, 2, Math.Sin(rot));
+            a.insertValue(2, 2, Math.Cos(rot));
+            return a;
+        }
+
+        private static Matrix rotate3DZMatrix(double rot)
+        {
+            Matrix a = identity3D;
+            a.insertValue(0, 0, Math.Cos(rot));
+            a.insertValue(1, 0, Math.Sin(rot));
+            a.insertValue(0, 1, Math.Sin(rot));
+            a.insertValue(1, 1, Math.Cos(rot));
+            return a;
+        }
+
         private static Matrix reflectMatrix(int columns, int rows, params bool[] reflect)
         {
-            if (columns != rows || columns <= reflect.Length - 1 || rows <= reflect.Length - 1)
+            if (MatrixValidation.validateReflectScaling(rows, columns, reflect.Length))
             {
                 return null;
             }
