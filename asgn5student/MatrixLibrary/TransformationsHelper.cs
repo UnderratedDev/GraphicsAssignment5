@@ -32,6 +32,32 @@ namespace asgn5v1.MatrixLibrary
             return a;
         }
 
+        private static Matrix translateMatrix(int columns, int rows, Matrix translation)
+        {
+            if (!MatrixValidation.validateNullMatrix(translation))
+            {
+                return null;
+            }
+
+            if (MatrixValidation.validateTranslation(rows, columns, translation.getColumns())) {
+                return null;
+            }
+            
+            if (translation.getRows() > 1)
+            {
+                return null;
+            }
+
+            Matrix a = MatrixManipulation.generateIdentityMatrix(columns);
+            int m_Columns = translation.getColumns();
+            int rowIndex = rows - 1;
+            for (int x = 0; x < m_Columns; ++x)
+            {
+                a.insertValue(x, rowIndex, translation.getValue(x, 0));
+            }
+            return a;
+        }
+
         private static Matrix shear2DMatrix(double x, double y) {
             Matrix a = identity2D;
             a.insertValue(0, 1, x);
@@ -109,11 +135,17 @@ namespace asgn5v1.MatrixLibrary
         public static Matrix translate (Matrix a, params double[] translation)
         {
             Matrix translate = translateMatrix(a.getColumns(), a.getRows(), translation);
-            Console.WriteLine(translate);
             Matrix result = a * translate;
             return result;
         }
 
+        public static Matrix translate(Matrix a, Matrix b)
+        {
+            Matrix translate = translateMatrix(a.getColumns(), a.getRows(), b);
+            Matrix result = a * translate;
+            return result;
+        }
+        
         public static Matrix scale (Matrix a, params double[] scaling)
         {
             Matrix scale = scaleMatrix(a.getColumns(), a.getRows(), scaling);
