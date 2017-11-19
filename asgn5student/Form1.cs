@@ -22,7 +22,8 @@ namespace asgn5v1
         int numpts = 0;
         int numlines = 0;
         bool gooddata = false;
-        double initialLength;
+        double initialWidth;
+        double initialHeight;
         double initialX;
         double initialY;
         Matrix vertices;
@@ -355,12 +356,13 @@ namespace asgn5v1
                 }
 
                 //now draw the lines
+                /*
                 Console.WriteLine("scrnpts");
                 Console.WriteLine(scrnpts);
                 Console.WriteLine("lines");
                 Console.WriteLine(lines);
                 Console.WriteLine("vertices");
-                Console.WriteLine(vertices);
+                Console.WriteLine(vertices); */
                 for (int i = 0; i < numlines; i++)
                 {
                     grfx.DrawLine(pen, (int)scrnpts.getValue(0, (int)lines.getValue(0, i)), (int)scrnpts.getValue(1, (int)lines.getValue(0, i)),
@@ -441,11 +443,12 @@ namespace asgn5v1
             }
             scrnpts = new Matrix(4, numpts);
             transformation = MatrixManipulation.generateIdentityMatrix(4); //initialize transformation matrix to identity
-            initialLength = this.Height / 2 / vertices.getHeight();
-            transformation = TransformationsHelper.scale(transformation, initialLength, initialLength);
+            initialHeight = this.Height / 2 / ShapeMatrixManipulation.getHeightPolygonMatrix2D(vertices);
+            initialWidth  = this.Width / 2 / ShapeMatrixManipulation.getWidthPolygonMatrix2D(vertices);
+            transformation = TransformationsHelper.scale(transformation, initialHeight, initialHeight);
             Matrix temp = vertices * transformation;
-            initialX = this.Width / 2 - (temp.getWidth()/2);
-            initialY = this.Height / 2 - (temp.getHeight()/2);
+            initialX = this.Width / 2 - (ShapeMatrixManipulation.getWidthPolygonMatrix2D(temp) /2);
+            initialY = this.Height / 2 - (ShapeMatrixManipulation.getHeightPolygonMatrix2D(temp) / 2);
             transformation = TransformationsHelper.translate(transformation, initialX, initialY);
             return true;
         } // end of GetNewData
@@ -505,19 +508,23 @@ namespace asgn5v1
         {
             if (e.Button == transleftbtn)
             {
+                transformation = TransformationsHelper.translate(transformation, -75);
                 Refresh();
             }
             if (e.Button == transrightbtn)
             {
+                transformation = TransformationsHelper.translate(transformation, 75);
                 Refresh();
             }
             if (e.Button == transupbtn)
             {
+                transformation = TransformationsHelper.translate(transformation, 0, -35);
                 Refresh();
             }
 
             if (e.Button == transdownbtn)
             {
+                transformation = TransformationsHelper.translate(transformation, 0, 35);
                 Refresh();
             }
             if (e.Button == scaleupbtn)
