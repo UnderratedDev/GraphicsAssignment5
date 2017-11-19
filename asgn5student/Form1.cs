@@ -453,6 +453,14 @@ namespace asgn5v1
             initialX = this.Width / 2 - (ShapeMatrixManipulation.getWidthPolygonMatrix2D(temp) /2);
             initialY = this.Height / 2 - (ShapeMatrixManipulation.getHeightPolygonMatrix2D(temp) / 2);
             transformation = TransformationsHelper.translate(transformation, initialX, initialY);
+            
+            // Matrix identity = MatrixManipulation.generateIdentityMatrix(transformation.getColumns());
+            // center *= TransformationsHelper.scale(identity, initialHeight, initialHeight);
+            // center *= TransformationsHelper.translate(identity, initialX, initialY);
+            // centerTranslation *= TransformationsHelper.scale(identity, initialHeight, initialHeight);
+            // centerTranslation *= TransformationsHelper.translate(identity, initialX, initialY);
+            // centerTranslation = center.getRange(0, 0, center.getColumns() - 1, 0);
+
             // center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
             // Console.WriteLine(centerTranslation);
             return true;
@@ -476,8 +484,8 @@ namespace asgn5v1
                 numpts++;
             }
             // vertices = MatrixManipulation.generateHomogenousMatrix(vertices);
-            center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
-            centerTranslation = vertices.getRange(0, 0, vertices.getColumns() - 2, 0);
+            // center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
+            // centerTranslation = vertices.getRange(0, 0, vertices.getColumns() - 2, 0);
         }// end of DecodeCoords
 
         void DecodeLines(ArrayList linesdata)
@@ -544,23 +552,32 @@ namespace asgn5v1
                 transformation = TransformationsHelper.translate(transformation, 0, 35);
                 Matrix identity = MatrixManipulation.generateIdentityMatrix(transformation.getColumns());
                 center *= TransformationsHelper.translate(identity, 0, 35);
-                centerTranslation = TransformationsHelper.translate(identity, 0, 35);
+                centerTranslation *= TransformationsHelper.translate(identity, 0, 35);
                 Refresh();
             }
             if (e.Button == scaleupbtn)
             {
+                // Replace scale transformation, 1.1, 1.1, 1.1, with a scale uniform function
+                center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
+                centerTranslation = vertices.getRange(0, 0, vertices.getColumns() - 2, 0);
+                center *= transformation;
+                centerTranslation = center.getRange(0, 0, center.getColumns() - 2, 0);
                 Matrix cTranslate = MatrixManipulation.inverseSigns(centerTranslation);
-                Console.WriteLine(cTranslate);
-                Matrix centerPoint = center;
-                Matrix identity = MatrixManipulation.generateIdentityMatrix(transformation.getColumns());
                 transformation = TransformationsHelper.translate(transformation, cTranslate);
                 transformation = TransformationsHelper.scale(transformation, 1.1, 1.1, 1.1);
-                Refresh();
-                // transformation = TransformationsHelper.translate(transformation, centerTranslation);
+                transformation = TransformationsHelper.translate(transformation, centerTranslation);
                 Refresh();
             }
             if (e.Button == scaledownbtn)
             {
+                center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
+                centerTranslation = vertices.getRange(0, 0, vertices.getColumns() - 2, 0);
+                center *= transformation;
+                centerTranslation = center.getRange(0, 0, center.getColumns() - 2, 0);
+                Matrix cTranslate = MatrixManipulation.inverseSigns(centerTranslation);
+                transformation = TransformationsHelper.translate(transformation, cTranslate);
+                transformation = TransformationsHelper.scale(transformation, 0.9, 0.9, 0.9);
+                transformation = TransformationsHelper.translate(transformation, centerTranslation);
                 Refresh();
             }
             if (e.Button == rotxby1btn)
