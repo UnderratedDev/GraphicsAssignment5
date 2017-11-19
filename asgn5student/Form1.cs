@@ -443,10 +443,10 @@ namespace asgn5v1
             transformation = MatrixManipulation.generateIdentityMatrix(4); //initialize transformation matrix to identity
             initialLength = this.Height / 2 / vertices.getHeight();
             transformation = TransformationsHelper.scale(transformation, initialLength, initialLength);
-            transformation = TransformationsHelper.translate(transformation, 10, 10);
             Matrix temp = vertices * transformation;
-            initialX = this.Width;
-            initialY = this.Height;
+            initialX = this.Width / 2 - (temp.getWidth()/2);
+            initialY = this.Height / 2 - (temp.getHeight()/2);
+            transformation = TransformationsHelper.translate(transformation, initialX, initialY);
             return true;
         } // end of GetNewData
 
