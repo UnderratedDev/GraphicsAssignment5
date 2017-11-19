@@ -27,7 +27,7 @@ namespace asgn5v1.MatrixLibrary
             int rowIndex = rows - 1;
             for (int x = 0; x < translation.Length; ++x)
             {
-                a.insertValue(rowIndex, x, translation[x]);
+                a.insertValue(x, rowIndex, translation[x]);
             }
             return a;
         }
@@ -109,6 +109,7 @@ namespace asgn5v1.MatrixLibrary
         public static Matrix translate (Matrix a, params double[] translation)
         {
             Matrix translate = translateMatrix(a.getColumns(), a.getRows(), translation);
+            Console.WriteLine(translate);
             Matrix result = a * translate;
             return result;
         }

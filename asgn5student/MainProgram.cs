@@ -22,12 +22,12 @@ namespace asgn5v1
             double[,] f = new double[,] { { 6, 4, 2 }, { 5, -2, 8 }, { 234, 5, 7 } };
             e.setMatrix(f, 3, 3);
 
-            Console.WriteLine(f);
+            // Console.WriteLine(f);
             // double derterminent = MatrixManipulation.matrixDeterminant(e);
 
             Matrix z = MatrixManipulation.generateHomogenousMatrix(e);
 
-            Console.WriteLine(z);
+            // Console.WriteLine(z);
 
             // Console.WriteLine(derterminent);
 
