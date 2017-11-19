@@ -22,6 +22,9 @@ namespace asgn5v1
         int numpts = 0;
         int numlines = 0;
         bool gooddata = false;
+        double initialLength;
+        double initialX;
+        double initialY;
         Matrix vertices;
         Matrix scrnpts;
         Matrix transformation = new Matrix(4, 4); //your main transformation matrix
@@ -77,7 +80,6 @@ namespace asgn5v1
             MenuItem miAbout = new MenuItem("&About",
                 new EventHandler(MenuAboutOnClick));
             Menu = new MainMenu(new MenuItem[] { miFile, miAbout });
-
 
         }
 
@@ -347,17 +349,22 @@ namespace asgn5v1
                     {
                         temp = 0.0d;
                         for (k = 0; k < 4; k++)
-                            temp += vertices.getValue(i, k) * transformation.getValue(k, j);
-                        scrnpts.insertValue(i, j, temp);
+                            temp += vertices.getValue(k, i) * transformation.getValue(j, k);
+                        scrnpts.insertValue(j, i, temp);
                     }
                 }
 
                 //now draw the lines
-
+                Console.WriteLine("scrnpts");
+                Console.WriteLine(scrnpts);
+                Console.WriteLine("lines");
+                Console.WriteLine(lines);
+                Console.WriteLine("vertices");
+                Console.WriteLine(vertices);
                 for (int i = 0; i < numlines; i++)
                 {
-                    grfx.DrawLine(pen, (int)scrnpts.getValue((int)lines.getValue(i, 0), 0), (int)scrnpts.getValue((int)lines.getValue(i, 0), 1),
-                        (int)scrnpts.getValue((int)lines.getValue(i, 1), 0), (int)scrnpts.getValue((int)lines.getValue(i, 1), 1));
+                    grfx.DrawLine(pen, (int)scrnpts.getValue(0, (int)lines.getValue(0, i)), (int)scrnpts.getValue(1, (int)lines.getValue(0, i)),
+                        (int)scrnpts.getValue(0, (int)lines.getValue(1, i)), (int)scrnpts.getValue(1, (int)lines.getValue(1, i)));
                 }
 
 
@@ -432,44 +439,49 @@ namespace asgn5v1
                 MessageBox.Show("***Failed to Open Line Data File***");
                 return false;
             }
-            scrnpts = new Matrix(numpts, 4);
+            scrnpts = new Matrix(4, numpts);
             transformation = MatrixManipulation.generateIdentityMatrix(4); //initialize transformation matrix to identity
+            initialLength = this.Height / 2 / vertices.getHeight();
+            transformation = TransformationsHelper.scale(transformation, initialLength, initialLength);
+            transformation = TransformationsHelper.translate(transformation, 10, 10);
+            Matrix temp = vertices * transformation;
+            initialX = this.Width;
+            initialY = this.Height;
             return true;
         } // end of GetNewData
 
         void DecodeCoords(ArrayList coorddata)
         {
             //this may allocate slightly more rows that necessary
-            vertices = new Matrix(coorddata.Count, 4);
+            vertices = new Matrix(4, coorddata.Count);
             numpts = 0;
             string[] text = null;
             for (int i = 0; i < coorddata.Count; i++)
             {
                 text = coorddata[i].ToString().Split(' ', ',');
-                vertices.insertValue(numpts, 0, double.Parse(text[0]));
-                if (vertices.getValue (numpts, 0) < 0.0d)
+                vertices.insertValue(0, i, double.Parse(text[0]));
+                if (vertices.getValue (0, i) < 0.0d)
                     break;
-                vertices.insertValue(numpts, 1, double.Parse(text[1]));
-                vertices.insertValue(numpts, 2, double.Parse(text[2]));
-                vertices.insertValue(numpts, 3, 1.0d);
+                vertices.insertValue(1, i, double.Parse(text[1]));
+                vertices.insertValue(2, i, double.Parse(text[2]));
+                vertices.insertValue(3, i, 1.0d);
                 numpts++;
             }
-
         }// end of DecodeCoords
 
         void DecodeLines(ArrayList linesdata)
         {
             //this may allocate slightly more rows that necessary
-            lines = new Matrix(linesdata.Count, 2);
+            lines = new Matrix(2, linesdata.Count);
             numlines = 0;
             string[] text = null;
             for (int i = 0; i < linesdata.Count; i++)
             {
                 text = linesdata[i].ToString().Split(' ', ',');
-                lines.insertValue(numlines, 0, int.Parse(text[0]));
-                if (lines.getValue(numlines, 0) < 0)
+                lines.insertValue(0, i, int.Parse(text[0]));
+                if (lines.getValue(0, i) < 0)
                     break;
-                lines.insertValue(numlines, 1, int.Parse(text[1]));
+                lines.insertValue(1, i, int.Parse(text[1]));
                 numlines++;
             }
         } // end of DecodeLines

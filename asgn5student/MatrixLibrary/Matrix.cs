@@ -12,27 +12,27 @@ namespace asgn5v1.MatrixLibrary
         private int rows;
         private double[,] matrix;
 
-        public Matrix (int columns, int rows)
+        public Matrix(int columns, int rows)
         {
             this.columns = columns;
             this.rows = rows;
             this.matrix = new double[columns, rows];
         }
 
-        public Matrix (int columns, int rows, double [,] matrix)
+        public Matrix(int columns, int rows, double[,] matrix)
         {
             this.columns = columns;
             this.rows = rows;
             this.matrix = matrix;
         }
 
-        public void setColumns (int columns)
+        public void setColumns(int columns)
         {
             this.columns = columns;
             this.matrix = new double[columns, rows];
         }
-        
-        public void setRows (int rows)
+
+        public void setRows(int rows)
         {
             this.rows = rows;
             this.matrix = new double[columns, rows];
@@ -45,12 +45,12 @@ namespace asgn5v1.MatrixLibrary
             rows = y;
         }
 
-        public int getColumns ()
+        public int getColumns()
         {
             return columns;
         }
 
-        public int getRows ()
+        public int getRows()
         {
             return rows;
         }
@@ -60,17 +60,17 @@ namespace asgn5v1.MatrixLibrary
             return this.matrix;
         }
 
-        public void insertValue (int x, int y, double value)
+        public void insertValue(int x, int y, double value)
         {
             this.matrix[x, y] = value;
         }
 
-        public double getValue (int x, int y)
+        public double getValue(int x, int y)
         {
             return this.matrix[x, y];
         }
 
-        public Matrix getRange (int x, int y, int x_, int y_)
+        public Matrix getRange(int x, int y, int x_, int y_)
         {
             if (x_ < x || y_ < y)
             {
@@ -79,7 +79,7 @@ namespace asgn5v1.MatrixLibrary
 
             int columns = x_ - x + 1;
             int rows = y_ - y + 1;
-          
+
             Matrix b = new Matrix(columns, rows);
             int col = 0, row = 0;
             for (int i = x; i <= x_; ++i)
@@ -93,6 +93,43 @@ namespace asgn5v1.MatrixLibrary
             }
 
             return b;
+        }
+
+        public double getHeight() {
+            double low = this.getValue(0, 1);
+            double high = low;
+
+            for (int i = 0; i < this.getColumns(); i++) {
+                if (this.getValue(i, 1) < low)
+                    low = this.getValue(i, 1);
+                else if (this.getValue(i, 1) > high)
+                    high = this.getValue(i, 1);
+                Console.WriteLine(high);
+                Console.WriteLine(low);
+            }
+            Console.WriteLine("height: " + (high - low));
+            return high-low;
+        }
+
+        public double getWidth() {
+            double low = this.getValue(0, 0);
+            double high = low;
+
+            for (int i = 0; i < this.getColumns(); i++)
+            {
+                if (this.getValue(i, 0) < low)
+                    low = this.getValue(i, 0);
+                else if (this.getValue(i, 0) > high)
+                    high = this.getValue(i, 0);
+                Console.WriteLine(high);
+                Console.WriteLine(low);
+            }
+            Console.WriteLine("width: " + (high - low));
+            return high - low - 1;
+        }
+
+        public double getCentre() {
+            return 0;
         }
 
         public static Matrix operator+ (Matrix a, Matrix b)
