@@ -19,7 +19,6 @@ namespace asgn5v1
         //private bool GetNewData();
 
         // basic data for Transformer
-
         int numpts = 0;
         int numlines = 0;
         bool gooddata = false;
@@ -57,6 +56,7 @@ namespace asgn5v1
             // Required for Windows Form Designer support
             //
             InitializeComponent();
+            new MainProgram();
 
             //
             // TODO: Add any constructor code after InitializeComponent call
