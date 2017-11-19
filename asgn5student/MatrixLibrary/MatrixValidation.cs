@@ -31,6 +31,15 @@ namespace asgn5v1.MatrixLibrary
                 throw new Exception("Minimum size 1 for an identity matrix");
        */
 
+        public static bool validateNullMatrix (Matrix a)
+        {
+            if (a == null)
+            {
+                throw new Exception("Matrix is null");
+            }
+            return true;
+        }
+
         public static bool validateIdentityMatrixSize(int s) {
             return s < 1;
         }
