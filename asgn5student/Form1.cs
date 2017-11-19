@@ -505,6 +505,7 @@ namespace asgn5v1
         {
             if (e.Button == transleftbtn)
             {
+                transformation = TransformationsHelper.translate(transformation, 12, 12);
                 Refresh();
             }
             if (e.Button == transrightbtn)
