@@ -151,5 +151,46 @@ namespace asgn5v1.MatrixLibrary
 
             return c == identity;
         }
+
+        public static Matrix matrixColumnExpander (Matrix a)
+        {
+            if (!MatrixValidation.validateNullMatrix(a))
+            {
+                return null;
+            }
+
+            int columns = a.getColumns(), rows = a.getRows();
+
+            Matrix b = new Matrix(columns + 1, rows);
+
+            for (int x = 0; x < columns; ++x)
+            {
+                for (int y = 0; y < rows; ++y)
+                {
+                    b.insertValue(x, y, a.getValue(x, y));
+                }
+            }
+
+            return b;
+
+        }
+
+        public static Matrix generateHomogenousMatrix (Matrix a)
+        {
+            if (!MatrixValidation.validateNullMatrix(a))
+            {
+                return null;
+            }
+            Matrix b = matrixColumnExpander(a);
+
+            int homogenousColumn = b.getColumns() - 1, rows = b.getRows();
+
+            for (int y = 0; y < rows; ++y)
+            {
+                b.insertValue(homogenousColumn, y, 1);
+            }
+
+            return b;
+        }
     }
 }

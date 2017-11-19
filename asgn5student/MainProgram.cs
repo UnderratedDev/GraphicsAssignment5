@@ -19,13 +19,17 @@ namespace asgn5v1
             b.setMatrix(d, 3, 3);
 
             Matrix e = new Matrix(3, 3);
-            double[,] f = new double[,] { { 6, 4, 2 }, { 1, -2, 8 }, { 1, 5, 7 } };
+            double[,] f = new double[,] { { 6, 4, 2 }, { 5, -2, 8 }, { 234, 5, 7 } };
             e.setMatrix(f, 3, 3);
 
             Console.WriteLine(f);
-            double derterminent = MatrixManipulation.matrixDeterminant(e);
+            // double derterminent = MatrixManipulation.matrixDeterminant(e);
 
-            Console.WriteLine(derterminent);
+            Matrix z = MatrixManipulation.generateHomogenousMatrix(e);
+
+            Console.WriteLine(z);
+
+            // Console.WriteLine(derterminent);
 
         }
     }
