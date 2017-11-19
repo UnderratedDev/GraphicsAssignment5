@@ -557,6 +557,7 @@ namespace asgn5v1
             }
             if (e.Button == scaleupbtn)
             {
+                // Replace scale transformation, 1.1, 1.1, 1.1, with a scale uniform function
                 center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
                 centerTranslation = vertices.getRange(0, 0, vertices.getColumns() - 2, 0);
                 center *= transformation;
