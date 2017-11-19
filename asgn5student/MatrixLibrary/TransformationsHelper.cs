@@ -27,7 +27,33 @@ namespace asgn5v1.MatrixLibrary
             int rowIndex = rows - 1;
             for (int x = 0; x < translation.Length; ++x)
             {
-                a.insertValue(rowIndex, x, translation[x]);
+                a.insertValue(x, rowIndex, translation[x]);
+            }
+            return a;
+        }
+
+        private static Matrix translateMatrix(int columns, int rows, Matrix translation)
+        {
+            if (!MatrixValidation.validateNullMatrix(translation))
+            {
+                return null;
+            }
+
+            if (MatrixValidation.validateTranslation(rows, columns, translation.getColumns())) {
+                return null;
+            }
+            
+            if (translation.getRows() > 1)
+            {
+                return null;
+            }
+
+            Matrix a = MatrixManipulation.generateIdentityMatrix(columns);
+            int m_Columns = translation.getColumns();
+            int rowIndex = rows - 1;
+            for (int x = 0; x < m_Columns; ++x)
+            {
+                a.insertValue(x, rowIndex, translation.getValue(x, 0));
             }
             return a;
         }
@@ -113,6 +139,13 @@ namespace asgn5v1.MatrixLibrary
             return result;
         }
 
+        public static Matrix translate(Matrix a, Matrix b)
+        {
+            Matrix translate = translateMatrix(a.getColumns(), a.getRows(), b);
+            Matrix result = a * translate;
+            return result;
+        }
+        
         public static Matrix scale (Matrix a, params double[] scaling)
         {
             Matrix scale = scaleMatrix(a.getColumns(), a.getRows(), scaling);
@@ -128,6 +161,26 @@ namespace asgn5v1.MatrixLibrary
 
         public static Matrix rotate2D(Matrix a, double rot) {
             Matrix rotation = rotate2DMatrix(rot);
+            Matrix result = a * rotation;
+            return result;
+        }
+
+        public static Matrix rotate3DX(Matrix a, double rot) {
+            Matrix rotation = rotate3DXMatrix(rot);
+            Matrix result = a * rotation;
+            return result;
+        }
+
+        public static Matrix rotate3DY(Matrix a, double rot)
+        {
+            Matrix rotation = rotate3DYMatrix(rot);
+            Matrix result = a * rotation;
+            return result;
+        }
+
+        public static Matrix rotate3DZ(Matrix a, double rot)
+        {
+            Matrix rotation = rotate3DZMatrix(rot);
             Matrix result = a * rotation;
             return result;
         }

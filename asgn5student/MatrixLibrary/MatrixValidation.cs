@@ -43,14 +43,21 @@ namespace asgn5v1.MatrixLibrary
         public static bool validateIdentityMatrixSize(int s) {
             return s < 1;
         }
+
         public static bool validateReflectScaling(int r, int c, int l) {
-            return (c !=r || c <= l - 1 || r <= l - 1) ? true : false;
+            return (c != r || c <= l - 1 || r <= l - 1);
         }
+
         public static bool validateTranslation(int r, int c, int l) {
-            return (c != r || c <= l - 1) ? true : false;
+            return (c != r || c <= l - 1);
         }
+
         public static bool validateInverse(Matrix a, Matrix b) {
-            return (a == null || a.getColumns() != a.getRows() || a.getColumns() != b.getColumns() || a.getRows() != b.getRows()) ? true : false;
+            return (a == null || a.getColumns() != a.getRows() || a.getColumns() != b.getColumns() || a.getRows() != b.getRows());
+        }
+
+        public static bool validationColumnLength (Matrix a, int column) {
+            return (validateNullMatrix(a) && a.getColumns() > column);
         }
     }
 }

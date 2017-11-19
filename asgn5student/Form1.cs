@@ -22,12 +22,15 @@ namespace asgn5v1
         int numpts = 0;
         int numlines = 0;
         bool gooddata = false;
-        double initialLength;
+        double initialWidth;
+        double initialHeight;
         double initialX;
         double initialY;
         Matrix vertices;
         Matrix scrnpts;
         Matrix transformation = new Matrix(4, 4); //your main transformation matrix
+        Matrix center;
+        Matrix centerTranslation;
         private System.Windows.Forms.ImageList tbimages;
         private System.Windows.Forms.ToolBar toolBar1;
         private System.Windows.Forms.ToolBarButton transleftbtn;
@@ -355,12 +358,13 @@ namespace asgn5v1
                 }
 
                 //now draw the lines
+                /*
                 Console.WriteLine("scrnpts");
                 Console.WriteLine(scrnpts);
                 Console.WriteLine("lines");
                 Console.WriteLine(lines);
                 Console.WriteLine("vertices");
-                Console.WriteLine(vertices);
+                Console.WriteLine(vertices); */
                 for (int i = 0; i < numlines; i++)
                 {
                     grfx.DrawLine(pen, (int)scrnpts.getValue(0, (int)lines.getValue(0, i)), (int)scrnpts.getValue(1, (int)lines.getValue(0, i)),
@@ -429,7 +433,8 @@ namespace asgn5v1
                 do
                 {
                     text = reader.ReadLine();
-                    if (text != null) linesdata.Add(text);
+                    if (text != null)
+                        linesdata.Add(text);
                 } while (text != null);
                 reader.Close();
                 DecodeLines(linesdata);
@@ -441,12 +446,23 @@ namespace asgn5v1
             }
             scrnpts = new Matrix(4, numpts);
             transformation = MatrixManipulation.generateIdentityMatrix(4); //initialize transformation matrix to identity
-            initialLength = this.Height / 2 / vertices.getHeight();
-            transformation = TransformationsHelper.scale(transformation, initialLength, initialLength);
+            initialHeight = this.Height / 2 / ShapeMatrixManipulation.getHeightPolygonMatrix2D(vertices);
+            initialWidth  = this.Width / 2 / ShapeMatrixManipulation.getWidthPolygonMatrix2D(vertices);
+            transformation = TransformationsHelper.scale(transformation, initialHeight, initialHeight);
             Matrix temp = vertices * transformation;
-            initialX = this.Width / 2 - (temp.getWidth()/2);
-            initialY = this.Height / 2 - (temp.getHeight()/2);
+            initialX = this.Width / 2 - (ShapeMatrixManipulation.getWidthPolygonMatrix2D(temp) /2);
+            initialY = this.Height / 2 - (ShapeMatrixManipulation.getHeightPolygonMatrix2D(temp) / 2);
             transformation = TransformationsHelper.translate(transformation, initialX, initialY);
+            
+            // Matrix identity = MatrixManipulation.generateIdentityMatrix(transformation.getColumns());
+            // center *= TransformationsHelper.scale(identity, initialHeight, initialHeight);
+            // center *= TransformationsHelper.translate(identity, initialX, initialY);
+            // centerTranslation *= TransformationsHelper.scale(identity, initialHeight, initialHeight);
+            // centerTranslation *= TransformationsHelper.translate(identity, initialX, initialY);
+            // centerTranslation = center.getRange(0, 0, center.getColumns() - 1, 0);
+
+            // center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
+            // Console.WriteLine(centerTranslation);
             return true;
         } // end of GetNewData
 
@@ -467,6 +483,9 @@ namespace asgn5v1
                 vertices.insertValue(3, i, 1.0d);
                 numpts++;
             }
+            // vertices = MatrixManipulation.generateHomogenousMatrix(vertices);
+            // center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
+            // centerTranslation = vertices.getRange(0, 0, vertices.getColumns() - 2, 0);
         }// end of DecodeCoords
 
         void DecodeLines(ArrayList linesdata)
@@ -505,33 +524,73 @@ namespace asgn5v1
         {
             if (e.Button == transleftbtn)
             {
-                transformation = TransformationsHelper.translate(transformation, 12, 12);
+                transformation = TransformationsHelper.translate(transformation, -75);
+                Matrix identity = MatrixManipulation.generateIdentityMatrix(transformation.getColumns());
+                center *= TransformationsHelper.translate(identity, 0, -75);
+                centerTranslation = TransformationsHelper.translate(identity, 0, -75);
                 Refresh();
             }
             if (e.Button == transrightbtn)
             {
+                transformation = TransformationsHelper.translate(transformation, 75);
+                Matrix identity = MatrixManipulation.generateIdentityMatrix(transformation.getColumns());
+                center *= TransformationsHelper.translate(identity, 0, 75);
+                centerTranslation = TransformationsHelper.translate(identity, 0, 75);
                 Refresh();
             }
             if (e.Button == transupbtn)
             {
+                transformation = TransformationsHelper.translate(transformation, 0, -35);
+                Matrix identity = MatrixManipulation.generateIdentityMatrix(transformation.getColumns());
+                center *= TransformationsHelper.translate(identity, 0, -35);
+                centerTranslation = TransformationsHelper.translate(identity, 0, -35);
                 Refresh();
             }
 
             if (e.Button == transdownbtn)
             {
+                transformation = TransformationsHelper.translate(transformation, 0, 35);
+                Matrix identity = MatrixManipulation.generateIdentityMatrix(transformation.getColumns());
+                center *= TransformationsHelper.translate(identity, 0, 35);
+                centerTranslation *= TransformationsHelper.translate(identity, 0, 35);
                 Refresh();
             }
             if (e.Button == scaleupbtn)
             {
+                // Replace scale transformation, 1.1, 1.1, 1.1, with a scale uniform function
+                center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
+                centerTranslation = vertices.getRange(0, 0, vertices.getColumns() - 2, 0);
+                center *= transformation;
+                centerTranslation = center.getRange(0, 0, center.getColumns() - 2, 0);
+                Matrix cTranslate = MatrixManipulation.inverseSigns(centerTranslation);
+                transformation = TransformationsHelper.translate(transformation, cTranslate);
+                transformation = TransformationsHelper.scale(transformation, 1.1, 1.1, 1.1);
+                transformation = TransformationsHelper.translate(transformation, centerTranslation);
                 Refresh();
             }
             if (e.Button == scaledownbtn)
             {
+                center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
+                centerTranslation = vertices.getRange(0, 0, vertices.getColumns() - 2, 0);
+                center *= transformation;
+                centerTranslation = center.getRange(0, 0, center.getColumns() - 2, 0);
+                Matrix cTranslate = MatrixManipulation.inverseSigns(centerTranslation);
+                transformation = TransformationsHelper.translate(transformation, cTranslate);
+                transformation = TransformationsHelper.scale(transformation, 0.9, 0.9, 0.9);
+                transformation = TransformationsHelper.translate(transformation, centerTranslation);
                 Refresh();
             }
             if (e.Button == rotxby1btn)
             {
-
+                /*center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
+                centerTranslation = vertices.getRange(0, 0, vertices.getColumns() - 2, 0);
+                center *= transformation;
+                centerTranslation = center.getRange(0, 0, center.getColumns() - 2, 0);
+                Matrix cTranslate = MatrixManipulation.inverseSigns(centerTranslation);
+                transformation = TransformationsHelper.translate(transformation, cTranslate);
+                transformation = TransformationsHelper.rotate3DX(transformation, 15);
+                transformation = TransformationsHelper.translate(transformation, centerTranslation);
+                Refresh();*/
             }
             if (e.Button == rotyby1btn)
             {

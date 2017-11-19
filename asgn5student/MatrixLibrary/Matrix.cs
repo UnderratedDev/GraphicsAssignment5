@@ -84,52 +84,16 @@ namespace asgn5v1.MatrixLibrary
             int col = 0, row = 0;
             for (int i = x; i <= x_; ++i)
             {
-                col = 0;
+
                 for (int j = y; j <= y_; ++j)
                 {
-                    b.insertValue(col++, row, this.getValue(i, j));
+                    b.insertValue(col, row++, this.getValue(i, j));
                 }
-                ++row;
+                row = 0;
+                ++col;
             }
 
             return b;
-        }
-
-        public double getHeight() {
-            double low = this.getValue(0, 1);
-            double high = low;
-
-            for (int i = 0; i < this.getColumns(); i++) {
-                if (this.getValue(i, 1) < low)
-                    low = this.getValue(i, 1);
-                else if (this.getValue(i, 1) > high)
-                    high = this.getValue(i, 1);
-                Console.WriteLine(high);
-                Console.WriteLine(low);
-            }
-            Console.WriteLine("height: " + (high - low));
-            return high-low;
-        }
-
-        public double getWidth() {
-            double low = this.getValue(0, 0);
-            double high = low;
-
-            for (int i = 0; i < this.getColumns(); i++)
-            {
-                if (this.getValue(i, 0) < low)
-                    low = this.getValue(i, 0);
-                else if (this.getValue(i, 0) > high)
-                    high = this.getValue(i, 0);
-                Console.WriteLine(high);
-                Console.WriteLine(low);
-            }
-            Console.WriteLine("width: " + (high - low));
-            return high - low - 1;
-        }
-
-        public double getCentre() {
-            return 0;
         }
 
         public static Matrix operator+ (Matrix a, Matrix b)
