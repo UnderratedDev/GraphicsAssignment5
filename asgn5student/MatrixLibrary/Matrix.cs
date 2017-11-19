@@ -84,12 +84,13 @@ namespace asgn5v1.MatrixLibrary
             int col = 0, row = 0;
             for (int i = x; i <= x_; ++i)
             {
-                col = 0;
+
                 for (int j = y; j <= y_; ++j)
                 {
-                    b.insertValue(col++, row, this.getValue(i, j));
+                    b.insertValue(col, row++, this.getValue(i, j));
                 }
-                ++row;
+                row = 0;
+                ++col;
             }
 
             return b;

@@ -192,5 +192,24 @@ namespace asgn5v1.MatrixLibrary
 
             return b;
         }
+
+        public static Matrix inverseSigns (Matrix a)
+        {
+            if (!MatrixValidation.validateNullMatrix(a)) {
+                return null;
+            }
+
+            int columns = a.getColumns(), rows = a.getRows();
+
+            Matrix b = new Matrix(columns, rows);
+
+            for (int x = 0; x < columns; ++x) {
+                for (int y = 0; y < rows; ++y) {
+                    b.insertValue(x, y, -a.getValue(x, y));
+                }
+            }
+
+            return b;
+        }
     }
 }
