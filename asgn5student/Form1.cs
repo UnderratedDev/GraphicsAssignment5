@@ -23,6 +23,9 @@ namespace asgn5v1
         int numpts = 0;
         int numlines = 0;
         bool gooddata = false;
+        double initialLength;
+        double initialX;
+        double initialY;
         Matrix vertices;
         Matrix scrnpts;
         Matrix transformation = new Matrix(4, 4); //your main transformation matrix
@@ -77,7 +80,6 @@ namespace asgn5v1
             MenuItem miAbout = new MenuItem("&About",
                 new EventHandler(MenuAboutOnClick));
             Menu = new MainMenu(new MenuItem[] { miFile, miAbout });
-
 
         }
 
@@ -434,6 +436,12 @@ namespace asgn5v1
             }
             scrnpts = new Matrix(numpts, 4);
             transformation = MatrixManipulation.generateIdentityMatrix(4); //initialize transformation matrix to identity
+            initialLength = this.Height / 2 / vertices.getHeight();
+            transformation = TransformationsHelper.scale(transformation, initialLength, initialLength);
+            Matrix temp = vertices * transformation;
+            initialX = this.Width / 2 - temp.getWidth();
+            initialY = this.Height / 2 - temp.getHeight();
+            transformation = TransformationsHelper.translate(transformation,, );
             return true;
         } // end of GetNewData
 
@@ -454,7 +462,6 @@ namespace asgn5v1
                 vertices.insertValue(numpts, 3, 1.0d);
                 numpts++;
             }
-
         }// end of DecodeCoords
 
         void DecodeLines(ArrayList linesdata)
