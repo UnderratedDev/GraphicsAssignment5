@@ -588,7 +588,7 @@ namespace asgn5v1
                 centerTranslation = center.getRange(0, 0, center.getColumns() - 2, 0);
                 Matrix cTranslate = MatrixManipulation.inverseSigns(centerTranslation);
                 transformation = TransformationsHelper.translate(transformation, cTranslate);
-                transformation = TransformationsHelper.rotate3DX(transformation, 10);
+                transformation = TransformationsHelper.rotate3DX(transformation, 0.05);
                 transformation = TransformationsHelper.translate(transformation, centerTranslation);
                 Refresh();
             }
@@ -600,7 +600,7 @@ namespace asgn5v1
                 centerTranslation = center.getRange(0, 0, center.getColumns() - 2, 0);
                 Matrix cTranslate = MatrixManipulation.inverseSigns(centerTranslation);
                 transformation = TransformationsHelper.translate(transformation, cTranslate);
-                transformation = TransformationsHelper.rotate3DY(transformation, 10);
+                transformation = TransformationsHelper.rotate3DY(transformation, 0.05);
                 transformation = TransformationsHelper.translate(transformation, centerTranslation);
                 Refresh();
             }
@@ -612,7 +612,7 @@ namespace asgn5v1
                 centerTranslation = center.getRange(0, 0, center.getColumns() - 2, 0);
                 Matrix cTranslate = MatrixManipulation.inverseSigns(centerTranslation);
                 transformation = TransformationsHelper.translate(transformation, cTranslate);
-                transformation = TransformationsHelper.rotate3DZ(transformation, 10);
+                transformation = TransformationsHelper.rotate3DZ(transformation, 0.05);
                 transformation = TransformationsHelper.translate(transformation, centerTranslation);
                 Refresh();
             }
