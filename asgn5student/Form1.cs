@@ -31,6 +31,7 @@ namespace asgn5v1
         Matrix transformation = new Matrix(4, 4); //your main transformation matrix
         Matrix center;
         Matrix centerTranslation;
+        private Timer rotateXTimer, rotateYTimer, rotateZTimer;
         private System.Windows.Forms.ImageList tbimages;
         private System.Windows.Forms.ToolBar toolBar1;
         private System.Windows.Forms.ToolBarButton transleftbtn;
@@ -520,8 +521,62 @@ namespace asgn5v1
 
         }
 
+        private void rotateX () {
+            center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
+            centerTranslation = vertices.getRange(0, 0, vertices.getColumns() - 2, 0);
+            center *= transformation;
+            centerTranslation = center.getRange(0, 0, center.getColumns() - 2, 0);
+            Matrix cTranslate = MatrixManipulation.inverseSigns(centerTranslation);
+            transformation = TransformationsHelper.translate(transformation, cTranslate);
+            transformation = TransformationsHelper.rotate3DX(transformation, 0.05);
+            transformation = TransformationsHelper.translate(transformation, centerTranslation);
+            Refresh();
+        }
+
+        private void rotateY() {
+            center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
+            centerTranslation = vertices.getRange(0, 0, vertices.getColumns() - 2, 0);
+            center *= transformation;
+            centerTranslation = center.getRange(0, 0, center.getColumns() - 2, 0);
+            Matrix cTranslate = MatrixManipulation.inverseSigns(centerTranslation);
+            transformation = TransformationsHelper.translate(transformation, cTranslate);
+            transformation = TransformationsHelper.rotate3DY(transformation, 1);
+            transformation = TransformationsHelper.translate(transformation, centerTranslation);
+            Refresh();
+        }
+
+        private void rotateZ () {
+            center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
+            centerTranslation = vertices.getRange(0, 0, vertices.getColumns() - 2, 0);
+            center *= transformation;
+            centerTranslation = center.getRange(0, 0, center.getColumns() - 2, 0);
+            Matrix cTranslate = MatrixManipulation.inverseSigns(centerTranslation);
+            transformation = TransformationsHelper.translate(transformation, cTranslate);
+            transformation = TransformationsHelper.rotate3DZ(transformation, 1);
+            transformation = TransformationsHelper.translate(transformation, centerTranslation);
+            Refresh();
+        }
+
+        private void rotateX(object sender, EventArgs e)
+        {
+            rotateX();
+        }
+
+        private void rotateY(object sender, EventArgs e)
+        {
+            rotateY();
+        }
+
+        private void rotateZ(object sender, EventArgs e)
+        {
+            rotateZ();
+        }
+
         private void toolBar1_ButtonClick(object sender, System.Windows.Forms.ToolBarButtonClickEventArgs e)
         {
+            if (vertices == null)
+                return;
+
             if (e.Button == transleftbtn)
             {
                 transformation = TransformationsHelper.translate(transformation, -75);
@@ -582,53 +637,38 @@ namespace asgn5v1
             }
             if (e.Button == rotxby1btn)
             {
-                center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
-                centerTranslation = vertices.getRange(0, 0, vertices.getColumns() - 2, 0);
-                center *= transformation;
-                centerTranslation = center.getRange(0, 0, center.getColumns() - 2, 0);
-                Matrix cTranslate = MatrixManipulation.inverseSigns(centerTranslation);
-                transformation = TransformationsHelper.translate(transformation, cTranslate);
-                transformation = TransformationsHelper.rotate3DX(transformation, 0.05);
-                transformation = TransformationsHelper.translate(transformation, centerTranslation);
-                Refresh();
+                rotateX();
             }
             if (e.Button == rotyby1btn)
             {
-                center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
-                centerTranslation = vertices.getRange(0, 0, vertices.getColumns() - 2, 0);
-                center *= transformation;
-                centerTranslation = center.getRange(0, 0, center.getColumns() - 2, 0);
-                Matrix cTranslate = MatrixManipulation.inverseSigns(centerTranslation);
-                transformation = TransformationsHelper.translate(transformation, cTranslate);
-                transformation = TransformationsHelper.rotate3DY(transformation, 0.05);
-                transformation = TransformationsHelper.translate(transformation, centerTranslation);
-                Refresh();
+                rotateY();
             }
             if (e.Button == rotzby1btn)
             {
-                center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
-                centerTranslation = vertices.getRange(0, 0, vertices.getColumns() - 2, 0);
-                center *= transformation;
-                centerTranslation = center.getRange(0, 0, center.getColumns() - 2, 0);
-                Matrix cTranslate = MatrixManipulation.inverseSigns(centerTranslation);
-                transformation = TransformationsHelper.translate(transformation, cTranslate);
-                transformation = TransformationsHelper.rotate3DZ(transformation, 0.05);
-                transformation = TransformationsHelper.translate(transformation, centerTranslation);
-                Refresh();
+                rotateZ();
             }
 
             if (e.Button == rotxbtn)
             {
-
+                rotateXTimer = new Timer();
+                rotateXTimer.Tick += new EventHandler(rotateX);
+                rotateXTimer.Interval = 200; // in miliseconds
+                rotateXTimer.Start();
             }
             if (e.Button == rotybtn)
             {
-
+                rotateYTimer = new Timer();
+                rotateYTimer.Tick += new EventHandler(rotateY);
+                rotateYTimer.Interval = 200; // in miliseconds
+                rotateYTimer.Start();
             }
 
             if (e.Button == rotzbtn)
             {
-
+                rotateZTimer = new Timer();
+                rotateZTimer.Tick += new EventHandler(rotateZ);
+                rotateZTimer.Interval = 200; // in miliseconds
+                rotateZTimer.Start();
             }
 
             if (e.Button == shearleftbtn)
