@@ -165,6 +165,26 @@ namespace asgn5v1.MatrixLibrary
             return result;
         }
 
+        public static Matrix rotate3DX(Matrix a, double rot) {
+            Matrix rotation = rotate3DXMatrix(rot);
+            Matrix result = a * rotation;
+            return result;
+        }
+
+        public static Matrix rotate3DY(Matrix a, double rot)
+        {
+            Matrix rotation = rotate3DYMatrix(rot);
+            Matrix result = a * rotation;
+            return result;
+        }
+
+        public static Matrix rotate3DZ(Matrix a, double rot)
+        {
+            Matrix rotation = rotate3DZMatrix(rot);
+            Matrix result = a * rotation;
+            return result;
+        }
+
         public static Matrix reflect (Matrix a, params bool[] reflect)
         {
             Matrix reflection = reflectMatrix(a.getColumns(), a.getRows(), reflect);
