@@ -582,23 +582,39 @@ namespace asgn5v1
             }
             if (e.Button == rotxby1btn)
             {
-                /*center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
+                center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
                 centerTranslation = vertices.getRange(0, 0, vertices.getColumns() - 2, 0);
                 center *= transformation;
                 centerTranslation = center.getRange(0, 0, center.getColumns() - 2, 0);
                 Matrix cTranslate = MatrixManipulation.inverseSigns(centerTranslation);
                 transformation = TransformationsHelper.translate(transformation, cTranslate);
-                transformation = TransformationsHelper.rotate3DX(transformation, 15);
+                transformation = TransformationsHelper.rotate3DX(transformation, 10);
                 transformation = TransformationsHelper.translate(transformation, centerTranslation);
-                Refresh();*/
+                Refresh();
             }
             if (e.Button == rotyby1btn)
             {
-
+                center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
+                centerTranslation = vertices.getRange(0, 0, vertices.getColumns() - 2, 0);
+                center *= transformation;
+                centerTranslation = center.getRange(0, 0, center.getColumns() - 2, 0);
+                Matrix cTranslate = MatrixManipulation.inverseSigns(centerTranslation);
+                transformation = TransformationsHelper.translate(transformation, cTranslate);
+                transformation = TransformationsHelper.rotate3DY(transformation, 10);
+                transformation = TransformationsHelper.translate(transformation, centerTranslation);
+                Refresh();
             }
             if (e.Button == rotzby1btn)
             {
-
+                center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
+                centerTranslation = vertices.getRange(0, 0, vertices.getColumns() - 2, 0);
+                center *= transformation;
+                centerTranslation = center.getRange(0, 0, center.getColumns() - 2, 0);
+                Matrix cTranslate = MatrixManipulation.inverseSigns(centerTranslation);
+                transformation = TransformationsHelper.translate(transformation, cTranslate);
+                transformation = TransformationsHelper.rotate3DZ(transformation, 10);
+                transformation = TransformationsHelper.translate(transformation, centerTranslation);
+                Refresh();
             }
 
             if (e.Button == rotxbtn)
