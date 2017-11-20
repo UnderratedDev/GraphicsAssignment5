@@ -92,7 +92,7 @@ namespace asgn5v1.MatrixLibrary
             Matrix a = identity3D;
             a.insertValue(1 , 1, Math.Cos(rot));
             a.insertValue(2, 1, Math.Sin(rot));
-            a.insertValue(1, 2, Math.Sin(rot));
+            a.insertValue(1, 2, -Math.Sin(rot));
             a.insertValue(2, 2, Math.Cos(rot));
             return a;
         }
@@ -102,7 +102,7 @@ namespace asgn5v1.MatrixLibrary
             Matrix a = identity3D;
             a.insertValue(0, 0, Math.Cos(rot));
             a.insertValue(2, 0, Math.Sin(rot));
-            a.insertValue(0, 2, Math.Sin(rot));
+            a.insertValue(0, 2, -Math.Sin(rot));
             a.insertValue(2, 2, Math.Cos(rot));
             return a;
         }
@@ -112,7 +112,7 @@ namespace asgn5v1.MatrixLibrary
             Matrix a = identity3D;
             a.insertValue(0, 0, Math.Cos(rot));
             a.insertValue(1, 0, Math.Sin(rot));
-            a.insertValue(0, 1, Math.Sin(rot));
+            a.insertValue(0, 1, -Math.Sin(rot));
             a.insertValue(1, 1, Math.Cos(rot));
             return a;
         }
