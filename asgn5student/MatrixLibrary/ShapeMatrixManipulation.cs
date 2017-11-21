@@ -28,10 +28,7 @@ namespace asgn5v1.MatrixLibrary
                     low = a.getValue(column, y);
                 else if (a.getValue(column, y) > high)
                     high = a.getValue(column, y);
-                Console.WriteLine(high);
-                Console.WriteLine(low);
             }
-            Console.WriteLine("width: " + (high - low));
             return high - low;
         }
 

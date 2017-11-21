@@ -446,24 +446,46 @@ namespace asgn5v1
                 return false;
             }
             scrnpts = new Matrix(4, numpts);
+            center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
+            centerTranslation = vertices.getRange(0, 0, vertices.getColumns() - 2, 0);
             transformation = MatrixManipulation.generateIdentityMatrix(4); //initialize transformation matrix to identity
+            Matrix cTranslate = MatrixManipulation.inverseSigns(centerTranslation);
+            transformation = TransformationsHelper.translate(transformation, cTranslate);
+            // center *= transformation;
+            // Console.WriteLine(center);
             initialHeight = this.Height / 2 / ShapeMatrixManipulation.getHeightPolygonMatrix2D(vertices);
             initialWidth  = this.Width / 2 / ShapeMatrixManipulation.getWidthPolygonMatrix2D(vertices);
+            // transformation = TransformationsHelper.reflect(transformation, true);
+            Console.WriteLine(transformation);
+            // Console.WriteLine(center);
             transformation = TransformationsHelper.scale(transformation, initialHeight, initialHeight);
+            transformation = TransformationsHelper.reflect(transformation, false, true);
+            Console.WriteLine(transformation);
+            // center *= transformation;
+            Console.WriteLine(center);
             Matrix temp = vertices * transformation;
-            initialX = this.Width / 2 - (ShapeMatrixManipulation.getWidthPolygonMatrix2D(temp) /2);
-            initialY = this.Height / 2 - (ShapeMatrixManipulation.getHeightPolygonMatrix2D(temp) / 2);
-            transformation = TransformationsHelper.translate(transformation, initialX, initialY);
-            
-            // Matrix identity = MatrixManipulation.generateIdentityMatrix(transformation.getColumns());
-            // center *= TransformationsHelper.scale(identity, initialHeight, initialHeight);
-            // center *= TransformationsHelper.translate(identity, initialX, initialY);
-            // centerTranslation *= TransformationsHelper.scale(identity, initialHeight, initialHeight);
-            // centerTranslation *= TransformationsHelper.translate(identity, initialX, initialY);
-            // centerTranslation = center.getRange(0, 0, center.getColumns() - 1, 0);
+            initialX = this.Width / 2 - (ShapeMatrixManipulation.getWidthPolygonMatrix2D(temp) / 2);
+           
+            initialY = this.Height / 2 + (ShapeMatrixManipulation.getHeightPolygonMatrix2D(temp) / 2) - 23;
 
-            // center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
-            // Console.WriteLine(centerTranslation);
+            Matrix t = MatrixManipulation.inverseSigns(transformation.getRange(0, transformation.getRows() - 1, transformation.getColumns() - 2, transformation.getRows() - 1));
+
+            transformation = TransformationsHelper.translate(transformation, t);
+
+            Console.WriteLine(transformation);
+
+            transformation = TransformationsHelper.translate(transformation, initialX, initialY);
+
+            Console.WriteLine("Height : " + this.Height);
+            Console.WriteLine("Width : " + this.Width);
+
+            Console.WriteLine("X : " + initialX);
+            Console.WriteLine("Y : " + initialY);
+
+            center *= transformation;
+
+            Console.WriteLine(center);
+
             return true;
         } // end of GetNewData
 
@@ -585,8 +607,7 @@ namespace asgn5v1
                 centerTranslation = TransformationsHelper.translate(identity, 0, -75);
                 Refresh();
             }
-            if (e.Button == transrightbtn)
-            {
+            if (e.Button == transrightbtn) {
                 transformation = TransformationsHelper.translate(transformation, 75);
                 Matrix identity = MatrixManipulation.generateIdentityMatrix(transformation.getColumns());
                 center *= TransformationsHelper.translate(identity, 0, 75);
@@ -623,8 +644,7 @@ namespace asgn5v1
                 transformation = TransformationsHelper.translate(transformation, centerTranslation);
                 Refresh();
             }
-            if (e.Button == scaledownbtn)
-            {
+            if (e.Button == scaledownbtn) {
                 center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
                 centerTranslation = vertices.getRange(0, 0, vertices.getColumns() - 2, 0);
                 center *= transformation;
@@ -635,6 +655,7 @@ namespace asgn5v1
                 transformation = TransformationsHelper.translate(transformation, centerTranslation);
                 Refresh();
             }
+
             if (e.Button == rotxby1btn)
             {
                 rotateX();
