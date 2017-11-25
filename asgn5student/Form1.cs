@@ -22,15 +22,13 @@ namespace asgn5v1
         int numpts = 0;
         int numlines = 0;
         bool gooddata = false;
-        double initialWidth;
-        double initialHeight;
-        double initialX;
-        double initialY;
         Matrix vertices;
         Matrix scrnpts;
-        Matrix transformation = new Matrix(4, 4); //your main transformation matrix
+        Matrix tNet = new Matrix(4, 4); //your main transformation matrix
         Matrix center;
         Matrix centerTranslation;
+        Matrix originalTransformation;
+        private Timer rotateXTimer, rotateYTimer, rotateZTimer;
         private System.Windows.Forms.ImageList tbimages;
         private System.Windows.Forms.ToolBar toolBar1;
         private System.Windows.Forms.ToolBarButton transleftbtn;
@@ -344,32 +342,14 @@ namespace asgn5v1
             if (gooddata)
             {
                 //create the screen coordinates:
-                // scrnpts = vertices*ctrans
-
-                for (int i = 0; i < numpts; i++)
-                {
-                    for (int j = 0; j < 4; j++)
-                    {
-                        temp = 0.0d;
-                        for (k = 0; k < 4; k++)
-                            temp += vertices.getValue(k, i) * transformation.getValue(j, k);
-                        scrnpts.insertValue(j, i, temp);
-                    }
-                }
-
-                //now draw the lines
-                /*
-                Console.WriteLine("scrnpts");
-                Console.WriteLine(scrnpts);
-                Console.WriteLine("lines");
-                Console.WriteLine(lines);
-                Console.WriteLine("vertices");
-                Console.WriteLine(vertices); */
+                scrnpts = vertices * tNet;
+                
                 for (int i = 0; i < numlines; i++)
                 {
                     grfx.DrawLine(pen, (int)scrnpts.getValue(0, (int)lines.getValue(0, i)), (int)scrnpts.getValue(1, (int)lines.getValue(0, i)),
                         (int)scrnpts.getValue(0, (int)lines.getValue(1, i)), (int)scrnpts.getValue(1, (int)lines.getValue(1, i)));
                 }
+      
 
 
             } // end of gooddata block	
@@ -395,6 +375,7 @@ namespace asgn5v1
 
         void RestoreInitialImage()
         {
+            tNet = originalTransformation;
             Invalidate();
         } // end of RestoreInitialImage
 
@@ -445,24 +426,26 @@ namespace asgn5v1
                 return false;
             }
             scrnpts = new Matrix(4, numpts);
-            transformation = MatrixManipulation.generateIdentityMatrix(4); //initialize transformation matrix to identity
-            initialHeight = this.Height / 2 / ShapeMatrixManipulation.getHeightPolygonMatrix2D(vertices);
-            initialWidth  = this.Width / 2 / ShapeMatrixManipulation.getWidthPolygonMatrix2D(vertices);
-            transformation = TransformationsHelper.scale(transformation, initialHeight, initialHeight);
-            Matrix temp = vertices * transformation;
-            initialX = this.Width / 2 - (ShapeMatrixManipulation.getWidthPolygonMatrix2D(temp) /2);
-            initialY = this.Height / 2 - (ShapeMatrixManipulation.getHeightPolygonMatrix2D(temp) / 2);
-            transformation = TransformationsHelper.translate(transformation, initialX, initialY);
-            
-            // Matrix identity = MatrixManipulation.generateIdentityMatrix(transformation.getColumns());
-            // center *= TransformationsHelper.scale(identity, initialHeight, initialHeight);
-            // center *= TransformationsHelper.translate(identity, initialX, initialY);
-            // centerTranslation *= TransformationsHelper.scale(identity, initialHeight, initialHeight);
-            // centerTranslation *= TransformationsHelper.translate(identity, initialX, initialY);
-            // centerTranslation = center.getRange(0, 0, center.getColumns() - 1, 0);
 
-            // center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
-            // Console.WriteLine(centerTranslation);
+            tNet = MatrixManipulation.generateIdentityMatrix(4);
+
+            center = vertices.getRange(0, 0, vertices.getColumns() - 2, 0);
+            centerTranslation = MatrixManipulation.inverseSigns(center);
+            tNet = TransformationsHelper.translate(tNet, centerTranslation);
+
+            tNet = TransformationsHelper.reflect(tNet, false, true);
+
+            double height = this.Height / 2 / ShapeMatrixManipulation.getHeightPolygonMatrix2D(vertices);
+
+            tNet = TransformationsHelper.scale(tNet, height, height);
+
+            double centerX = this.Width / 2;
+            double centerY = this.Height / 2;
+
+            tNet = TransformationsHelper.translate(tNet, centerX, centerY);
+
+            originalTransformation = tNet;
+
             return true;
         } // end of GetNewData
 
@@ -481,11 +464,8 @@ namespace asgn5v1
                 vertices.insertValue(1, i, double.Parse(text[1]));
                 vertices.insertValue(2, i, double.Parse(text[2]));
                 vertices.insertValue(3, i, 1.0d);
-                numpts++;
+                ++numpts;
             }
-            // vertices = MatrixManipulation.generateHomogenousMatrix(vertices);
-            // center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
-            // centerTranslation = vertices.getRange(0, 0, vertices.getColumns() - 2, 0);
         }// end of DecodeCoords
 
         void DecodeLines(ArrayList linesdata)
@@ -520,115 +500,149 @@ namespace asgn5v1
 
         }
 
+        private void rotateX () {
+            centerTranslation = scrnpts.getRange(0, 0, vertices.getColumns() - 2, 0);
+            Matrix cTranslate = MatrixManipulation.inverseSigns(centerTranslation);
+            tNet = TransformationsHelper.translate(tNet, cTranslate);
+            tNet = TransformationsHelper.rotate3DX(tNet, 0.5);
+            tNet = TransformationsHelper.translate(tNet, centerTranslation);
+            Refresh();
+        }
+
+        private void rotateY()
+        {
+            centerTranslation = scrnpts.getRange(0, 0, vertices.getColumns() - 2, 0);
+            Matrix cTranslate = MatrixManipulation.inverseSigns(centerTranslation);
+            tNet = TransformationsHelper.translate(tNet, cTranslate);
+            tNet = TransformationsHelper.rotate3DY(tNet, 0.5);
+            tNet = TransformationsHelper.translate(tNet, centerTranslation);
+            Refresh();
+        }
+
+        private void rotateZ () {
+            centerTranslation = scrnpts.getRange(0, 0, vertices.getColumns() - 2, 0);
+            Matrix cTranslate = MatrixManipulation.inverseSigns(centerTranslation);
+            tNet = TransformationsHelper.translate(tNet, cTranslate);
+            tNet = TransformationsHelper.rotate3DZ(tNet, 0.5);
+            tNet = TransformationsHelper.translate(tNet, centerTranslation);
+            Refresh();
+        }
+
+        private void rotateX(object sender, EventArgs e)
+        {
+            rotateX();
+        }
+
+        private void rotateY(object sender, EventArgs e)
+        {
+            rotateY();
+        }
+
+        private void rotateZ(object sender, EventArgs e)
+        {
+            rotateZ();
+        }
+
+        public void stopTimers () {
+            if (rotateXTimer != null)
+            {
+                Console.WriteLine("STOPX");
+                rotateXTimer.Stop();
+            }
+
+            if (rotateYTimer != null) {
+                Console.WriteLine("STOPY");
+                rotateYTimer.Stop();
+            }
+
+            if (rotateZTimer != null)
+            {
+                Console.WriteLine("STOPZ");
+                rotateZTimer.Stop();
+            }
+        }
+
         private void toolBar1_ButtonClick(object sender, System.Windows.Forms.ToolBarButtonClickEventArgs e)
         {
+            // if (vertices == null)
+               // return;
+
             if (e.Button == transleftbtn)
             {
-                transformation = TransformationsHelper.translate(transformation, -75);
-                Matrix identity = MatrixManipulation.generateIdentityMatrix(transformation.getColumns());
-                center *= TransformationsHelper.translate(identity, 0, -75);
-                centerTranslation = TransformationsHelper.translate(identity, 0, -75);
+                tNet = TransformationsHelper.translate(tNet, -75);
                 Refresh();
             }
-            if (e.Button == transrightbtn)
-            {
-                transformation = TransformationsHelper.translate(transformation, 75);
-                Matrix identity = MatrixManipulation.generateIdentityMatrix(transformation.getColumns());
-                center *= TransformationsHelper.translate(identity, 0, 75);
-                centerTranslation = TransformationsHelper.translate(identity, 0, 75);
+            if (e.Button == transrightbtn) {
+                tNet = TransformationsHelper.translate(tNet, 75);
                 Refresh();
             }
             if (e.Button == transupbtn)
             {
-                transformation = TransformationsHelper.translate(transformation, 0, -35);
-                Matrix identity = MatrixManipulation.generateIdentityMatrix(transformation.getColumns());
-                center *= TransformationsHelper.translate(identity, 0, -35);
-                centerTranslation = TransformationsHelper.translate(identity, 0, -35);
+                tNet = TransformationsHelper.translate(tNet, 0, -35);
                 Refresh();
             }
 
             if (e.Button == transdownbtn)
             {
-                transformation = TransformationsHelper.translate(transformation, 0, 35);
-                Matrix identity = MatrixManipulation.generateIdentityMatrix(transformation.getColumns());
-                center *= TransformationsHelper.translate(identity, 0, 35);
-                centerTranslation *= TransformationsHelper.translate(identity, 0, 35);
+                tNet = TransformationsHelper.translate(tNet, 0, 35);
                 Refresh();
             }
             if (e.Button == scaleupbtn)
             {
                 // Replace scale transformation, 1.1, 1.1, 1.1, with a scale uniform function
-                center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
-                centerTranslation = vertices.getRange(0, 0, vertices.getColumns() - 2, 0);
-                center *= transformation;
-                centerTranslation = center.getRange(0, 0, center.getColumns() - 2, 0);
+                centerTranslation = scrnpts.getRange(0, 0, vertices.getColumns() - 2, 0);
                 Matrix cTranslate = MatrixManipulation.inverseSigns(centerTranslation);
-                transformation = TransformationsHelper.translate(transformation, cTranslate);
-                transformation = TransformationsHelper.scale(transformation, 1.1, 1.1, 1.1);
-                transformation = TransformationsHelper.translate(transformation, centerTranslation);
+                tNet = TransformationsHelper.translate(tNet, cTranslate);
+                tNet = TransformationsHelper.scale(tNet, 1.1, 1.1, 1.1);
+                tNet = TransformationsHelper.translate(tNet, centerTranslation);
                 Refresh();
             }
-            if (e.Button == scaledownbtn)
-            {
-                center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
-                centerTranslation = vertices.getRange(0, 0, vertices.getColumns() - 2, 0);
-                center *= transformation;
-                centerTranslation = center.getRange(0, 0, center.getColumns() - 2, 0);
+            if (e.Button == scaledownbtn) {
+                centerTranslation = scrnpts.getRange(0, 0, vertices.getColumns() - 2, 0);
                 Matrix cTranslate = MatrixManipulation.inverseSigns(centerTranslation);
-                transformation = TransformationsHelper.translate(transformation, cTranslate);
-                transformation = TransformationsHelper.scale(transformation, 0.9, 0.9, 0.9);
-                transformation = TransformationsHelper.translate(transformation, centerTranslation);
+                tNet = TransformationsHelper.translate(tNet, cTranslate);
+                tNet = TransformationsHelper.scale(tNet, 0.9, 0.9, 0.9);
+                tNet = TransformationsHelper.translate(tNet, centerTranslation);
                 Refresh();
             }
+
             if (e.Button == rotxby1btn)
             {
-                center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
-                centerTranslation = vertices.getRange(0, 0, vertices.getColumns() - 2, 0);
-                center *= transformation;
-                centerTranslation = center.getRange(0, 0, center.getColumns() - 2, 0);
-                Matrix cTranslate = MatrixManipulation.inverseSigns(centerTranslation);
-                transformation = TransformationsHelper.translate(transformation, cTranslate);
-                transformation = TransformationsHelper.rotate3DX(transformation, 0.05);
-                transformation = TransformationsHelper.translate(transformation, centerTranslation);
-                Refresh();
+                rotateX();
             }
             if (e.Button == rotyby1btn)
             {
-                center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
-                centerTranslation = vertices.getRange(0, 0, vertices.getColumns() - 2, 0);
-                center *= transformation;
-                centerTranslation = center.getRange(0, 0, center.getColumns() - 2, 0);
-                Matrix cTranslate = MatrixManipulation.inverseSigns(centerTranslation);
-                transformation = TransformationsHelper.translate(transformation, cTranslate);
-                transformation = TransformationsHelper.rotate3DY(transformation, 0.05);
-                transformation = TransformationsHelper.translate(transformation, centerTranslation);
-                Refresh();
+                rotateY();
             }
             if (e.Button == rotzby1btn)
             {
-                center = vertices.getRange(0, 0, vertices.getColumns() - 1, 0);
-                centerTranslation = vertices.getRange(0, 0, vertices.getColumns() - 2, 0);
-                center *= transformation;
-                centerTranslation = center.getRange(0, 0, center.getColumns() - 2, 0);
-                Matrix cTranslate = MatrixManipulation.inverseSigns(centerTranslation);
-                transformation = TransformationsHelper.translate(transformation, cTranslate);
-                transformation = TransformationsHelper.rotate3DZ(transformation, 0.05);
-                transformation = TransformationsHelper.translate(transformation, centerTranslation);
-                Refresh();
+                rotateZ();
             }
 
             if (e.Button == rotxbtn)
             {
-
+                stopTimers();
+                rotateXTimer = new Timer();
+                rotateXTimer.Tick += new EventHandler(rotateX);
+                rotateXTimer.Interval = 100; // in miliseconds
+                rotateXTimer.Start();
             }
             if (e.Button == rotybtn)
             {
-
+                stopTimers();
+                rotateYTimer = new Timer();
+                rotateYTimer.Tick += new EventHandler(rotateY);
+                rotateYTimer.Interval = 100; // in miliseconds
+                rotateYTimer.Start();
             }
 
             if (e.Button == rotzbtn)
             {
-
+                stopTimers();
+                rotateZTimer = new Timer();
+                rotateZTimer.Tick += new EventHandler(rotateZ);
+                rotateZTimer.Interval = 100; // in miliseconds
+                rotateZTimer.Start();
             }
 
             if (e.Button == shearleftbtn)

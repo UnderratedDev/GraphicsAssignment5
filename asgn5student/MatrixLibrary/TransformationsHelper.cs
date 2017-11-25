@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace asgn5v1.MatrixLibrary
 {
-    static class TransformationsHelper
-    {
+    static class TransformationsHelper {
         private static Matrix identity2D = MatrixManipulation.generateIdentityMatrix(3);
         private static Matrix identity3D = MatrixManipulation.generateIdentityMatrix(4);
         private static int minTransformationMatrixSize = 3;
@@ -89,7 +88,7 @@ namespace asgn5v1.MatrixLibrary
         }
 
         private static Matrix rotate3DXMatrix(double rot) {
-            Matrix a = identity3D;
+            Matrix a = MatrixManipulation.generateIdentityMatrix(4);
             a.insertValue(1 , 1, Math.Cos(rot));
             a.insertValue(2, 1, Math.Sin(rot));
             a.insertValue(1, 2, -Math.Sin(rot));
@@ -99,7 +98,7 @@ namespace asgn5v1.MatrixLibrary
 
         private static Matrix rotate3DYMatrix(double rot)
         {
-            Matrix a = identity3D;
+            Matrix a = MatrixManipulation.generateIdentityMatrix(4);
             a.insertValue(0, 0, Math.Cos(rot));
             a.insertValue(2, 0, Math.Sin(rot));
             a.insertValue(0, 2, -Math.Sin(rot));
@@ -109,7 +108,8 @@ namespace asgn5v1.MatrixLibrary
 
         private static Matrix rotate3DZMatrix(double rot)
         {
-            Matrix a = identity3D;
+            // Matrix a = identity3D;
+            Matrix a = MatrixManipulation.generateIdentityMatrix(4);
             a.insertValue(0, 0, Math.Cos(rot));
             a.insertValue(1, 0, Math.Sin(rot));
             a.insertValue(0, 1, -Math.Sin(rot));
