@@ -564,8 +564,10 @@ namespace asgn5v1
 
         private void toolBar1_ButtonClick(object sender, System.Windows.Forms.ToolBarButtonClickEventArgs e)
         {
-            // if (vertices == null)
-               // return;
+            if (vertices == null)
+                return;
+
+            stopTimers();
 
             if (e.Button == transleftbtn)
             {
@@ -621,7 +623,6 @@ namespace asgn5v1
 
             if (e.Button == rotxbtn)
             {
-                stopTimers();
                 rotateXTimer = new Timer();
                 rotateXTimer.Tick += new EventHandler(rotateX);
                 rotateXTimer.Interval = 100; // in miliseconds
@@ -629,7 +630,6 @@ namespace asgn5v1
             }
             if (e.Button == rotybtn)
             {
-                stopTimers();
                 rotateYTimer = new Timer();
                 rotateYTimer.Tick += new EventHandler(rotateY);
                 rotateYTimer.Interval = 100; // in miliseconds
@@ -638,7 +638,6 @@ namespace asgn5v1
 
             if (e.Button == rotzbtn)
             {
-                stopTimers();
                 rotateZTimer = new Timer();
                 rotateZTimer.Tick += new EventHandler(rotateZ);
                 rotateZTimer.Interval = 100; // in miliseconds
