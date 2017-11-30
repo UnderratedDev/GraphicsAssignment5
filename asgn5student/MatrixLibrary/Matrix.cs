@@ -96,6 +96,28 @@ namespace asgn5v1.MatrixLibrary
             return b;
         }
 
+        public int rowFind (Matrix a) {
+            if (columns != a.getColumns()) {
+                throw new Exception("Columns do not match");
+            }
+            
+            for (int y = 0; y < rows; ++y) {
+                for (int x = 0; x < columns; ++x) {
+
+                    if (this.getValue(x, y) != a.getValue(x, 0)) {
+                        break;
+                    }
+
+                    if (x == columns - 1) {
+                        return y;
+                    }
+                }
+            }
+
+            return -1;
+
+        }
+
         public static Matrix operator+ (Matrix a, Matrix b)
         {
             if (a == null || b == null) 

@@ -59,20 +59,17 @@ namespace asgn5v1.MatrixLibrary
 
         private static Matrix shear2DMatrix(double x, double y) {
             Matrix a = identity2D;
-            a.insertValue(1, 0, x);
-            a.insertValue(0, 1, y);
+            a.insertValue(0, 1, x);
+            a.insertValue(1, 0, y);
             return a;
         }
 
-        private static Matrix shear3DMatrix (double x, double y, double z)
-        {
-            Matrix a = identity3D;
-            a.insertValue(1, 0, x);
-            a.insertValue(2, 0, x);
+        private static Matrix shear3DMatrix (double y, double z) {
+            Matrix a = MatrixManipulation.generateIdentityMatrix(4);
             a.insertValue(0, 1, y);
-            a.insertValue(2, 1, y);
             a.insertValue(0, 2, z);
-            a.insertValue(1, 2, z);
+            // a.insertValue(1, 0, y);
+            // a.insertValue(2, 0, z);
             return a;
         }
 
@@ -173,9 +170,10 @@ namespace asgn5v1.MatrixLibrary
         }
 
         //shearing in 3D
-        public static Matrix shear3D(Matrix a, double x, double y, double z)
-        {
-            Matrix shear = shear3DMatrix(x, y, z);
+        public static Matrix shear3D(Matrix a, double y, double z) {
+            // Matrix shear = shear3DMatrix(x, y, z);
+            Matrix shear = shear3DMatrix(y, z);
+            Console.WriteLine(shear);
             Matrix result = a * shear;
             return result;
         }

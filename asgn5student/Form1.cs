@@ -21,6 +21,7 @@ namespace asgn5v1
         // basic data for Transformer
         int numpts = 0;
         int numlines = 0;
+        int bottomRow = 0;
         bool gooddata = false;
         Matrix vertices;
         Matrix scrnpts;
@@ -28,6 +29,7 @@ namespace asgn5v1
         Matrix center;
         Matrix centerTranslation;
         Matrix originalTransformation;
+        Matrix bottomLine;
         private Timer rotateXTimer, rotateYTimer, rotateZTimer;
         private System.Windows.Forms.ImageList tbimages;
         private System.Windows.Forms.ToolBar toolBar1;
@@ -344,13 +346,12 @@ namespace asgn5v1
                 //create the screen coordinates:
                 scrnpts = vertices * tNet;
                 
-                for (int i = 0; i < numlines; i++)
-                {
+                for (int i = 0; i < numlines; i++) {
                     grfx.DrawLine(pen, (int)scrnpts.getValue(0, (int)lines.getValue(0, i)), (int)scrnpts.getValue(1, (int)lines.getValue(0, i)),
                         (int)scrnpts.getValue(0, (int)lines.getValue(1, i)), (int)scrnpts.getValue(1, (int)lines.getValue(1, i)));
                 }
-      
 
+                bottomLine = scrnpts.getRange(0, bottomRow, scrnpts.getColumns() - 2, bottomRow);
 
             } // end of gooddata block	
         } // end of OnPaint
@@ -437,12 +438,18 @@ namespace asgn5v1
 
             double height = this.Height / 2 / ShapeMatrixManipulation.getHeightPolygonMatrix2D(vertices);
 
-            tNet = TransformationsHelper.scale(tNet, height, height);
+            tNet = TransformationsHelper.scale(tNet, height, height, height);
 
             double centerX = this.Width / 2;
             double centerY = this.Height / 2;
 
             tNet = TransformationsHelper.translate(tNet, centerX, centerY);
+
+            bottomLine = ShapeMatrixManipulation.getDimensionHigh(vertices, 0);
+
+            bottomRow = vertices.rowFind(bottomLine);
+
+            Console.WriteLine(bottomRow);
 
             originalTransformation = tNet;
 
@@ -504,7 +511,7 @@ namespace asgn5v1
             centerTranslation = scrnpts.getRange(0, 0, vertices.getColumns() - 2, 0);
             Matrix cTranslate = MatrixManipulation.inverseSigns(centerTranslation);
             tNet = TransformationsHelper.translate(tNet, cTranslate);
-            tNet = TransformationsHelper.rotate3DX(tNet, 0.5);
+            tNet = TransformationsHelper.rotate3DX(tNet, 0.05);
             tNet = TransformationsHelper.translate(tNet, centerTranslation);
             Refresh();
         }
@@ -514,7 +521,7 @@ namespace asgn5v1
             centerTranslation = scrnpts.getRange(0, 0, vertices.getColumns() - 2, 0);
             Matrix cTranslate = MatrixManipulation.inverseSigns(centerTranslation);
             tNet = TransformationsHelper.translate(tNet, cTranslate);
-            tNet = TransformationsHelper.rotate3DY(tNet, 0.5);
+            tNet = TransformationsHelper.rotate3DY(tNet, 0.05);
             tNet = TransformationsHelper.translate(tNet, centerTranslation);
             Refresh();
         }
@@ -523,7 +530,7 @@ namespace asgn5v1
             centerTranslation = scrnpts.getRange(0, 0, vertices.getColumns() - 2, 0);
             Matrix cTranslate = MatrixManipulation.inverseSigns(centerTranslation);
             tNet = TransformationsHelper.translate(tNet, cTranslate);
-            tNet = TransformationsHelper.rotate3DZ(tNet, 0.5);
+            tNet = TransformationsHelper.rotate3DZ(tNet, 0.05);
             tNet = TransformationsHelper.translate(tNet, centerTranslation);
             Refresh();
         }
@@ -578,19 +585,16 @@ namespace asgn5v1
                 tNet = TransformationsHelper.translate(tNet, 75);
                 Refresh();
             }
-            if (e.Button == transupbtn)
-            {
+            if (e.Button == transupbtn) {
                 tNet = TransformationsHelper.translate(tNet, 0, -35);
                 Refresh();
             }
 
-            if (e.Button == transdownbtn)
-            {
+            if (e.Button == transdownbtn) {
                 tNet = TransformationsHelper.translate(tNet, 0, 35);
                 Refresh();
             }
-            if (e.Button == scaleupbtn)
-            {
+            if (e.Button == scaleupbtn) {
                 // Replace scale transformation, 1.1, 1.1, 1.1, with a scale uniform function
                 centerTranslation = scrnpts.getRange(0, 0, vertices.getColumns() - 2, 0);
                 Matrix cTranslate = MatrixManipulation.inverseSigns(centerTranslation);
@@ -608,59 +612,68 @@ namespace asgn5v1
                 Refresh();
             }
 
-            if (e.Button == rotxby1btn)
-            {
+            if (e.Button == rotxby1btn) {
                 rotateX();
             }
-            if (e.Button == rotyby1btn)
-            {
+
+            if (e.Button == rotyby1btn) {
                 rotateY();
             }
-            if (e.Button == rotzby1btn)
-            {
+
+            if (e.Button == rotzby1btn) {
                 rotateZ();
             }
 
-            if (e.Button == rotxbtn)
-            {
+            if (e.Button == rotxbtn) {
                 rotateXTimer = new Timer();
                 rotateXTimer.Tick += new EventHandler(rotateX);
-                rotateXTimer.Interval = 100; // in miliseconds
+                rotateXTimer.Interval = 10; // in miliseconds
                 rotateXTimer.Start();
             }
-            if (e.Button == rotybtn)
-            {
+
+            if (e.Button == rotybtn) {
                 rotateYTimer = new Timer();
                 rotateYTimer.Tick += new EventHandler(rotateY);
-                rotateYTimer.Interval = 100; // in miliseconds
+                rotateYTimer.Interval = 10; // in miliseconds
                 rotateYTimer.Start();
             }
 
-            if (e.Button == rotzbtn)
-            {
+            if (e.Button == rotzbtn) {
                 rotateZTimer = new Timer();
                 rotateZTimer.Tick += new EventHandler(rotateZ);
-                rotateZTimer.Interval = 100; // in miliseconds
+                rotateZTimer.Interval = 10; // in miliseconds
                 rotateZTimer.Start();
             }
 
-            if (e.Button == shearleftbtn)
-            {
+            if (e.Button == shearleftbtn) {
+                Matrix cTranslate = MatrixManipulation.inverseSigns(bottomLine);
+                tNet = TransformationsHelper.translate(tNet, cTranslate);
+                tNet = TransformationsHelper.shear3D(tNet, 0.1, 0);
+                tNet = TransformationsHelper.translate(tNet, bottomLine);
+
+                Console.WriteLine("********");
+
+                Console.WriteLine(bottomLine);
+
+                Console.WriteLine("********");
+
+
                 Refresh();
             }
 
-            if (e.Button == shearrightbtn)
-            {
+            if (e.Button == shearrightbtn) {
+                Matrix cTranslate = MatrixManipulation.inverseSigns(bottomLine);
+                tNet = TransformationsHelper.translate(tNet, cTranslate);
+                tNet = TransformationsHelper.shear3D(tNet, -0.1, 0);
+                tNet = TransformationsHelper.translate(tNet, bottomLine);
                 Refresh();
             }
 
-            if (e.Button == resetbtn)
-            {
+            if (e.Button == resetbtn) {
                 RestoreInitialImage();
             }
 
-            if (e.Button == exitbtn)
-            {
+            if (e.Button == exitbtn) {
                 Close();
             }
 
