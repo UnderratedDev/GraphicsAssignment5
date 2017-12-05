@@ -105,7 +105,7 @@ namespace asgn5v1.MatrixLibrary
             return a;
         }
 
-        private static Matrix rotate3DYMatrix(double rot)
+        private static Matrix rotate3DYMatrix(double rot) 
         {
             Matrix a = MatrixManipulation.generateIdentityMatrix(4);
             a.insertValue(0, 0, Math.Cos(rot));

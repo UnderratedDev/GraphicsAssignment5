@@ -350,7 +350,7 @@ namespace asgn5v1
                     grfx.DrawLine(pen, (int)scrnpts.getValue(0, (int)lines.getValue(0, i)), (int)scrnpts.getValue(1, (int)lines.getValue(0, i)),
                         (int)scrnpts.getValue(0, (int)lines.getValue(1, i)), (int)scrnpts.getValue(1, (int)lines.getValue(1, i)));
                 }
-
+                
                 bottomLine = scrnpts.getRange(0, bottomRow, scrnpts.getColumns() - 2, bottomRow);
 
             } // end of gooddata block	
@@ -445,11 +445,7 @@ namespace asgn5v1
 
             tNet = TransformationsHelper.translate(tNet, centerX, centerY);
 
-            bottomLine = ShapeMatrixManipulation.getDimensionHigh(vertices, 0);
-
-            bottomRow = vertices.rowFind(bottomLine);
-
-            Console.WriteLine(bottomRow);
+            // bottomLine = ShapeMatrixManipulation.getDimensionHigh(vertices, 1);
 
             originalTransformation = tNet;
 
@@ -576,6 +572,12 @@ namespace asgn5v1
 
             stopTimers();
 
+            bottomLine = ShapeMatrixManipulation.getDimensionHigh(scrnpts, 1);
+
+            bottomRow = scrnpts.rowFind(bottomLine);
+
+            Console.WriteLine(bottomRow);
+
             if (e.Button == transleftbtn)
             {
                 tNet = TransformationsHelper.translate(tNet, -75);
@@ -646,6 +648,7 @@ namespace asgn5v1
             }
 
             if (e.Button == shearleftbtn) {
+                bottomLine = scrnpts.getRange(0, bottomRow, scrnpts.getColumns() - 2, bottomRow);
                 Matrix cTranslate = MatrixManipulation.inverseSigns(bottomLine);
                 tNet = TransformationsHelper.translate(tNet, cTranslate);
                 tNet = TransformationsHelper.shear3D(tNet, 0.1, 0);
@@ -662,6 +665,7 @@ namespace asgn5v1
             }
 
             if (e.Button == shearrightbtn) {
+                bottomLine = scrnpts.getRange(0, bottomRow, scrnpts.getColumns() - 2, bottomRow);
                 Matrix cTranslate = MatrixManipulation.inverseSigns(bottomLine);
                 tNet = TransformationsHelper.translate(tNet, cTranslate);
                 tNet = TransformationsHelper.shear3D(tNet, -0.1, 0);
